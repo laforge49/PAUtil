@@ -17,6 +17,10 @@ public class Continuation<RESPONSE_TYPE> implements ResponseProcessor<RESPONSE_T
     public void processResponse(final RESPONSE_TYPE rsp) throws Exception {
         new ContinuationRequest<RESPONSE_TYPE>(targetMailbox, rp, rsp).send();
     }
+
+    public void processResponse(final Mailbox source, final RESPONSE_TYPE rsp) throws Exception {
+        new ContinuationRequest<RESPONSE_TYPE>(targetMailbox, rp, rsp).send(source);
+    }
 }
 
 class ContinuationRequest<RESPONSE_TYPE> extends RequestBase<Void> {
