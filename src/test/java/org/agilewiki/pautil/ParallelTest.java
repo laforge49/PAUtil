@@ -2,8 +2,6 @@ package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
 import org.agilewiki.pactor.*;
-import org.agilewiki.pactor.util.Delay;
-import org.agilewiki.pactor.util.ResponseCounter;
 
 /**
  * Test code.

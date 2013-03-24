@@ -2,7 +2,6 @@ package org.agilewiki.pautil.ancestor;
 
 import org.agilewiki.pactor.ActorBase;
 import org.agilewiki.pactor.Mailbox;
-import org.agilewiki.pactor.ancestor.Ancestor;
 
 public class AncestorBase extends ActorBase implements Ancestor {
     public static Ancestor getAncestor(final Ancestor child, final Class targetClass) {
