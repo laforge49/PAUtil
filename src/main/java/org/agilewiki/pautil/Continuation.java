@@ -8,14 +8,14 @@ public class Continuation<RESPONSE_TYPE> implements ResponseProcessor<RESPONSE_T
     private Mailbox targetMailbox;
     private ResponseProcessor<RESPONSE_TYPE> rp;
 
-    public Continuation(final Mailbox _targetMailbox, final ResponseProcessor _rp) {
+    public Continuation(final Mailbox _targetMailbox, final ResponseProcessor<RESPONSE_TYPE> _rp) {
         targetMailbox = _targetMailbox;
         rp = _rp;
     }
 
     @Override
     public void processResponse(final RESPONSE_TYPE rsp) throws Exception {
-        new ContinuationRequest<RESPONSE_TYPE>(targetMailbox, rp, rsp);
+        new ContinuationRequest<RESPONSE_TYPE>(targetMailbox, rp, rsp).send();
     }
 }
 
