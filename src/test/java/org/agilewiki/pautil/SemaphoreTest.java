@@ -1,27 +1,34 @@
 package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
-import org.agilewiki.pactor.*;
+
+import org.agilewiki.pactor.ExceptionHandler;
+import org.agilewiki.pactor.Mailbox;
+import org.agilewiki.pactor.MailboxFactory;
+import org.agilewiki.pactor.Request;
+import org.agilewiki.pactor.RequestBase;
+import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.impl.DefaultMailboxFactoryImpl;
 
 /**
  * Test code.
  */
 public class SemaphoreTest extends TestCase {
     public void testI() throws Exception {
-        final MailboxFactory mailboxFactory = new MailboxFactory();
+        final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         final Semaphore semaphore = new Semaphore(
                 mailboxFactory.createMailbox(), 1);
         semaphore.acquire.pend();
-        mailboxFactory.shutdown();
+        mailboxFactory.close();
     }
 
     public void testII() throws Exception {
-        final MailboxFactory mailboxFactory = new MailboxFactory();
+        final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         final Semaphore semaphore = new Semaphore(
                 mailboxFactory.createMailbox(), 0);
         semaphore.release.send();
         semaphore.acquire.pend();
-        mailboxFactory.shutdown();
+        mailboxFactory.close();
     }
 
     private Request<Void> delayedRelease(final Semaphore semaphore,
@@ -45,7 +52,7 @@ public class SemaphoreTest extends TestCase {
     }
 
     public void testIII() throws Exception {
-        final MailboxFactory mailboxFactory = new MailboxFactory();
+        final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         final Semaphore semaphore = new Semaphore(
                 mailboxFactory.createMailbox(), 0);
         final long d = 100;
@@ -54,7 +61,7 @@ public class SemaphoreTest extends TestCase {
         semaphore.acquire.pend();
         final long t1 = System.currentTimeMillis();
         assertTrue(t1 - t0 >= d);
-        mailboxFactory.shutdown();
+        mailboxFactory.close();
     }
 
     private Request<Boolean> acquireException(final Semaphore semaphore,
@@ -72,21 +79,19 @@ public class SemaphoreTest extends TestCase {
                         responseProcessor.processResponse(true);
                     }
                 });
-                semaphore.acquire.reply(mailbox,
-                        new ResponseProcessor<Void>() {
-                            @Override
-                            public void processResponse(final Void response)
-                                    throws Exception {
-                                throw new SecurityException(
-                                        "thrown after acquire");
-                            }
-                        });
+                semaphore.acquire.reply(mailbox, new ResponseProcessor<Void>() {
+                    @Override
+                    public void processResponse(final Void response)
+                            throws Exception {
+                        throw new SecurityException("thrown after acquire");
+                    }
+                });
             }
         };
     }
 
     public void testIV() throws Exception {
-        final MailboxFactory mailboxFactory = new MailboxFactory();
+        final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         final Semaphore semaphore = new Semaphore(
                 mailboxFactory.createMailbox(), 0);
         final long d = 100;
@@ -97,6 +102,6 @@ public class SemaphoreTest extends TestCase {
         final long t1 = System.currentTimeMillis();
         assertTrue(t1 - t0 >= d);
         assertTrue(result);
-        mailboxFactory.shutdown();
+        mailboxFactory.close();
     }
 }

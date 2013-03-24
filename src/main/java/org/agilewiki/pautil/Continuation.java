@@ -4,11 +4,13 @@ import org.agilewiki.pactor.Mailbox;
 import org.agilewiki.pactor.RequestBase;
 import org.agilewiki.pactor.ResponseProcessor;
 
-public class Continuation<RESPONSE_TYPE> implements ResponseProcessor<RESPONSE_TYPE> {
-    private Mailbox targetMailbox;
-    private ResponseProcessor<RESPONSE_TYPE> rp;
+public class Continuation<RESPONSE_TYPE> implements
+        ResponseProcessor<RESPONSE_TYPE> {
+    private final Mailbox targetMailbox;
+    private final ResponseProcessor<RESPONSE_TYPE> rp;
 
-    public Continuation(final Mailbox _targetMailbox, final ResponseProcessor<RESPONSE_TYPE> _rp) {
+    public Continuation(final Mailbox _targetMailbox,
+            final ResponseProcessor<RESPONSE_TYPE> _rp) {
         targetMailbox = _targetMailbox;
         rp = _rp;
     }
@@ -18,18 +20,19 @@ public class Continuation<RESPONSE_TYPE> implements ResponseProcessor<RESPONSE_T
         new ContinuationRequest<RESPONSE_TYPE>(targetMailbox, rp, rsp).send();
     }
 
-    public void processResponse(final Mailbox source, final RESPONSE_TYPE rsp) throws Exception {
-        new ContinuationRequest<RESPONSE_TYPE>(targetMailbox, rp, rsp).send(source);
+    public void processResponse(final Mailbox source, final RESPONSE_TYPE rsp)
+            throws Exception {
+        new ContinuationRequest<RESPONSE_TYPE>(targetMailbox, rp, rsp)
+                .send(source);
     }
 }
 
 class ContinuationRequest<RESPONSE_TYPE> extends RequestBase<Void> {
-    private ResponseProcessor<RESPONSE_TYPE> rp;
-    private RESPONSE_TYPE rsp;
+    private final ResponseProcessor<RESPONSE_TYPE> rp;
+    private final RESPONSE_TYPE rsp;
 
     public ContinuationRequest(final Mailbox targetMailbox,
-                               final ResponseProcessor<RESPONSE_TYPE> _rp,
-                               final RESPONSE_TYPE _rsp) {
+            final ResponseProcessor<RESPONSE_TYPE> _rp, final RESPONSE_TYPE _rsp) {
         super(targetMailbox);
         rp = _rp;
         rsp = _rsp;

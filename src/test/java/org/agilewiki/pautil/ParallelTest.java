@@ -1,7 +1,13 @@
 package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
-import org.agilewiki.pactor.*;
+
+import org.agilewiki.pactor.Mailbox;
+import org.agilewiki.pactor.MailboxFactory;
+import org.agilewiki.pactor.Request;
+import org.agilewiki.pactor.RequestBase;
+import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.impl.DefaultMailboxFactoryImpl;
 
 /**
  * Test code.
@@ -15,7 +21,7 @@ public class ParallelTest extends TestCase {
     private Request<Void> start;
 
     public void test() throws Exception {
-        mailboxFactory = new MailboxFactory();
+        mailboxFactory = new DefaultMailboxFactoryImpl();
         mailbox = mailboxFactory.createMailbox();
 
         start = new RequestBase<Void>(mailbox) {
@@ -39,6 +45,6 @@ public class ParallelTest extends TestCase {
         start.pend();
         final long t1 = System.currentTimeMillis();
         assertTrue((t1 - t0) < DELAY + DELAY / 2);
-        mailboxFactory.shutdown();
+        mailboxFactory.close();
     }
 }
