@@ -1,18 +1,22 @@
-package org.agilewiki.pautil;
+package org.agilewiki.pautil.atomic;
 
 import org.agilewiki.pactor.*;
+import org.agilewiki.pautil.Ancestor;
+import org.agilewiki.pautil.AncestorBase;
 
-import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class AtomicProcessor extends AncestorBase {
-    private Queue<AtomicEntry> entries = new ArrayDeque<AtomicEntry>();
+public abstract class AtomicProcessor extends AncestorBase {
+    private Queue<AtomicEntry> entries;
     private Mailbox autoFlushMailbox;
+
+    protected abstract Queue<AtomicEntry> createQueue();
 
     @Override
     public void initialize(final Mailbox _mailbox, final Ancestor _parent) {
         super.initialize(_mailbox, _parent);
         autoFlushMailbox = _mailbox.autoFlush();
+        entries = createQueue();
     }
 
     @Override

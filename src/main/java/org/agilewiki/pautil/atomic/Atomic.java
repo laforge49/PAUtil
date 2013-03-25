@@ -1,4 +1,4 @@
-package org.agilewiki.pautil;
+package org.agilewiki.pautil.atomic;
 
 import org.agilewiki.pactor.ResponseProcessor;
 
