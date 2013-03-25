@@ -10,11 +10,11 @@ public class AncestorBase extends ActorBase implements Ancestor {
         return getMatch(child.getParent(), targetClass);
     }
 
-    public static Ancestor getMatch(Ancestor ancestor, final Class targetClass) {
-        while (ancestor != null) {
-            if (targetClass.isInstance(ancestor))
-                return ancestor;
-            ancestor = ancestor.getParent();
+    public static Ancestor getMatch(Ancestor child, final Class targetClass) {
+        while (child != null) {
+            if (targetClass.isInstance(child))
+                return child;
+            child = child.getParent();
         }
         return null;
     }
