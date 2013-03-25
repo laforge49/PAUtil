@@ -8,7 +8,7 @@ import org.agilewiki.pactor.MailboxFactory;
 import org.agilewiki.pactor.Request;
 import org.agilewiki.pactor.RequestBase;
 import org.agilewiki.pactor.ResponseProcessor;
-import org.agilewiki.pactor.impl.DefaultMailboxFactoryImpl;
+import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 /**
  * Test code.

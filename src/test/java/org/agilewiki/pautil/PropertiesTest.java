@@ -2,7 +2,7 @@ package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
 import org.agilewiki.pactor.MailboxFactory;
-import org.agilewiki.pactor.impl.DefaultMailboxFactoryImpl;
+import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 public class PropertiesTest extends TestCase {
     public void test() throws Exception {
