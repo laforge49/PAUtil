@@ -1,4 +1,4 @@
-package org.agilewiki.pautil.ancestor;
+package org.agilewiki.pautil;
 
 import org.agilewiki.pactor.ActorBase;
 import org.agilewiki.pactor.Mailbox;
