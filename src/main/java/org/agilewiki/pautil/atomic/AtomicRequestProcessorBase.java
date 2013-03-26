@@ -6,7 +6,7 @@ import org.agilewiki.pautil.AncestorBase;
 
 import java.util.Queue;
 
-public abstract class AtomicProcessorBase extends AncestorBase implements AtomicProcessor {
+public abstract class AtomicRequestProcessorBase extends AncestorBase implements AtomicRequestProcessor {
     private Queue<AtomicEntry> entries;
 
     protected abstract Queue<AtomicEntry> createQueue();

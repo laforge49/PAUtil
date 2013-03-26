@@ -10,7 +10,7 @@ import org.agilewiki.pactor.RequestBase;
 import org.agilewiki.pactor.ResponseProcessor;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
-public class ContinuationTest extends TestCase {
+public class BoundResponseProcessorTest extends TestCase {
     public void test() throws Exception {
         final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         try {
@@ -38,9 +38,9 @@ class Driver extends ActorBase {
             @Override
             public void processRequest(final ResponseProcessor<String> rp)
                     throws Exception {
-                final Continuation<String> continuation = new Continuation<String>(
+                final BoundResponseProcessor<String> boundResponseProcessor = new BoundResponseProcessor<String>(
                         _mailbox, rp);
-                final Application application = new Application(continuation);
+                final Application application = new Application(boundResponseProcessor);
                 application.start();
             }
         };
@@ -48,16 +48,16 @@ class Driver extends ActorBase {
 }
 
 class Application extends Thread {
-    private final Continuation<String> continuation;
+    private final BoundResponseProcessor<String> boundResponseProcessor;
 
-    public Application(final Continuation<String> _continuation) {
-        continuation = _continuation;
+    public Application(final BoundResponseProcessor<String> _boundResponseProcessor) {
+        boundResponseProcessor = _boundResponseProcessor;
     }
 
     @Override
     public void run() {
         try {
-            continuation.processResponse("Hello world!");
+            boundResponseProcessor.processResponse("Hello world!");
         } catch (final Throwable ex) {
             ex.printStackTrace();
         }

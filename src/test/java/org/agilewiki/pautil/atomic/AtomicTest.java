@@ -41,7 +41,7 @@ public class AtomicTest extends TestCase {
     public void test3() throws Exception {
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         try {
-            final FifoProcessor fp = new FifoProcessor();
+            final FifoRequestProcessor fp = new FifoRequestProcessor();
             fp.initialize(mailboxFactory.createAsyncMailbox());
             fp.atomicReq(bReq(fp.getMailbox())).pend();
         } catch (UnsupportedOperationException uoe) {
@@ -80,6 +80,6 @@ public class AtomicTest extends TestCase {
     }
 }
 
-class AP extends FifoProcessor {
+class AP extends FifoRequestProcessor {
     int count = 0;
 }

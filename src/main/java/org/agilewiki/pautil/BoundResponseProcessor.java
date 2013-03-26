@@ -4,13 +4,13 @@ import org.agilewiki.pactor.Mailbox;
 import org.agilewiki.pactor.RequestBase;
 import org.agilewiki.pactor.ResponseProcessor;
 
-public class Continuation<RESPONSE_TYPE> implements
+public class BoundResponseProcessor<RESPONSE_TYPE> implements
         ResponseProcessor<RESPONSE_TYPE> {
     private final Mailbox targetMailbox;
     private final ResponseProcessor<RESPONSE_TYPE> rp;
 
-    public Continuation(final Mailbox _targetMailbox,
-            final ResponseProcessor<RESPONSE_TYPE> _rp) {
+    public BoundResponseProcessor(final Mailbox _targetMailbox,
+                                  final ResponseProcessor<RESPONSE_TYPE> _rp) {
         targetMailbox = _targetMailbox;
         rp = _rp;
     }
