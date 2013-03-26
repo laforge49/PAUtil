@@ -29,21 +29,11 @@ public class AtomicTest extends TestCase {
                         _rp.processResponse(ap.count);
                     }
                 }, null);
-                AtomA atom1 = new AtomA();
-                AtomA atom2 = new AtomA();
-                AtomA atom3 = new AtomA();
-                AtomA atom4 = new AtomA();
-                AtomA atom5 = new AtomA();
-                atom1.msg = 1;
-                atom2.msg = 2;
-                atom3.msg = 3;
-                atom4.msg = 4;
-                atom5.msg = 5;
-                ap.atomicReq(atom1).reply(_mailbox, rc);
-                ap.atomicReq(atom2).reply(_mailbox, rc);
-                ap.atomicReq(atom3).reply(_mailbox, rc);
-                ap.atomicReq(atom4).reply(_mailbox, rc);
-                ap.atomicReq(atom5).reply(_mailbox, rc);
+                ap.atomicReq(new AtomA(1)).reply(_mailbox, rc);
+                ap.atomicReq(new AtomA(2)).reply(_mailbox, rc);
+                ap.atomicReq(new AtomA(3)).reply(_mailbox, rc);
+                ap.atomicReq(new AtomA(4)).reply(_mailbox, rc);
+                ap.atomicReq(new AtomA(5)).reply(_mailbox, rc);
             }
         };
     }
@@ -53,7 +43,11 @@ class AP extends FifoProcessor {
 }
 
 class AtomA implements Atomic<Void> {
-    public int msg;
+    final private int msg;
+
+    public AtomA(final int _msg) {
+        this.msg = _msg;
+    }
 
     @Override
     public void process(final AtomicProcessorBase _processor, final ResponseProcessor<Void> _rp)
