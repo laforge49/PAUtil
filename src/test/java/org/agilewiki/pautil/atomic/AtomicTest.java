@@ -37,7 +37,21 @@ public class AtomicTest extends TestCase {
             }
         };
     }
+
+    public void test2() throws Exception {
+        MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
+        try {
+            final FifoProcessor fp = new FifoProcessor();
+            fp.initialize(mailboxFactory.createAsyncMailbox());
+            fp.atomicReq(new AtomB()).pend();
+        } catch (ExpiredAtomException eae) {
+            mailboxFactory.close();
+            return;
+        }
+        throw new IllegalStateException();
+    }
 }
+
 class AP extends FifoProcessor {
     int count = 0;
 }
@@ -69,5 +83,18 @@ class AtomA implements Atomic<Void> {
     @Override
     public boolean isExpired() {
         return false;
+    }
+}
+
+class AtomB implements Atomic<Void> {
+
+    @Override
+    public void process(AtomicProcessorBase processor, ResponseProcessor<Void> rp) throws Exception {
+        throw new UnsupportedOperationException("shouldn't happen");
+    }
+
+    @Override
+    public boolean isExpired() {
+        return true;
     }
 }
