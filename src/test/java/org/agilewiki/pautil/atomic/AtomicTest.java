@@ -23,12 +23,12 @@ public class AtomicTest extends TestCase {
             public void processRequest(final ResponseProcessor<Integer> _rp) throws Exception {
                 final AP ap = new AP();
                 ap.initialize(getMailbox().createAsyncMailbox());
-                ResponseProcessor rc = new ResponseCounter(5, new ResponseProcessor() {
+                ResponseProcessor rc = new ResponseCounter(5, null, new ResponseProcessor() {
                     @Override
                     public void processResponse(Object response) throws Exception {
                         _rp.processResponse(ap.count);
                     }
-                }, null);
+                });
                 ap.atomicReq(new AtomA(1)).reply(_mailbox, rc);
                 ap.atomicReq(new AtomA(2)).reply(_mailbox, rc);
                 ap.atomicReq(new AtomA(3)).reply(_mailbox, rc);

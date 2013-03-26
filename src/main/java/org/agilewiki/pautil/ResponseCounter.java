@@ -10,8 +10,8 @@ public class ResponseCounter<RESPONSE_TYPE> implements
     private RESPONSE_TYPE result;
 
     public ResponseCounter(final int _count,
-            final ResponseProcessor<RESPONSE_TYPE> _rp,
-            final RESPONSE_TYPE response) {
+                           final RESPONSE_TYPE response,
+            final ResponseProcessor<RESPONSE_TYPE> _rp) {
         this.count = _count;
         this.rp = _rp;
     }

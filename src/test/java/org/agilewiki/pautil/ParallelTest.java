@@ -30,7 +30,7 @@ public class ParallelTest extends TestCase {
                     final ResponseProcessor<Void> responseProcessor)
                     throws Exception {
                 final ResponseCounter<Void> responseCounter = new ResponseCounter<Void>(
-                        LOADS, responseProcessor, null);
+                        LOADS, null, responseProcessor);
                 int i = 0;
                 while (i < LOADS) {
                     final Delay dly = new Delay(mailboxFactory);
