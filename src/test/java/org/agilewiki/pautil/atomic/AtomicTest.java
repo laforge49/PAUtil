@@ -5,21 +5,29 @@ import org.agilewiki.pactor.*;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 public class AtomicTest extends TestCase {
-    public void test() throws Exception {
+    public void test1() throws Exception {
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         try {
-            startReq(mailboxFactory.createAsyncMailbox()).pend();
+            startReq1(mailboxFactory.createAsyncMailbox()).pend();
         } finally {
             mailboxFactory.close();
         }
     }
 
-    Request<Void> startReq(final Mailbox _mailbox) {
+    Request<Void> startReq1(final Mailbox _mailbox) {
         return new RequestBase<Void>(_mailbox) {
             @Override
             public void processRequest(final ResponseProcessor<Void> _rp) throws Exception {
                 AtomicProcessorBase atomicProcessor = new FifoProcessor();
                 atomicProcessor.initialize(getMailbox().createAsyncMailbox());
+                AtomA atom1 = new AtomA();
+                atom1.msg = "1";
+                atomicProcessor.atomicReq(atom1).reply(_mailbox, new ResponseProcessor() {
+                    @Override
+                    public void processResponse(Object response) throws Exception {
+                        assertEquals("1", response);
+                    }
+                });
                 _rp.processResponse(null);
             }
         };

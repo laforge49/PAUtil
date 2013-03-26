@@ -25,6 +25,10 @@ public class AncestorBase extends ActorBase implements Ancestor {
         initialize(null, _parent);
     }
 
+    public void initialize(final Mailbox _mailbox) {
+        initialize(_mailbox, null);
+    }
+
     public void initialize(final Mailbox _mailbox, final Ancestor _parent) {
         super.initialize(_mailbox);
         parent = _parent;
