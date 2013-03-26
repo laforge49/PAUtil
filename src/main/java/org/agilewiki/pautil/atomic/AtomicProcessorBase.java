@@ -53,6 +53,8 @@ public abstract class AtomicProcessorBase extends AncestorBase implements Atomic
                 }
             });
             try {
+                if (atom.isExpired())
+                    throw new ExpiredAtomException(atom);
                 atom.process(AtomicProcessorBase.this, _rp);
             } catch (Exception ex) {
                 _rp.processResponse(ex);
