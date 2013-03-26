@@ -29,26 +29,13 @@ public class AtomicTest extends TestCase {
                         _rp.processResponse(ap.count);
                     }
                 });
-                ap.atomicReq(new AtomA(1)).reply(_mailbox, rc);
-                ap.atomicReq(new AtomA(2)).reply(_mailbox, rc);
-                ap.atomicReq(new AtomA(3)).reply(_mailbox, rc);
-                ap.atomicReq(new AtomA(4)).reply(_mailbox, rc);
-                ap.atomicReq(new AtomA(5)).reply(_mailbox, rc);
+                ap.atomicReq(aReq(ap, 1)).reply(_mailbox, rc);
+                ap.atomicReq(aReq(ap, 2)).reply(_mailbox, rc);
+                ap.atomicReq(aReq(ap, 3)).reply(_mailbox, rc);
+                ap.atomicReq(aReq(ap, 4)).reply(_mailbox, rc);
+                ap.atomicReq(aReq(ap, 5)).reply(_mailbox, rc);
             }
         };
-    }
-
-    public void test2() throws Exception {
-        MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
-        try {
-            final FifoProcessor fp = new FifoProcessor();
-            fp.initialize(mailboxFactory.createAsyncMailbox());
-            fp.atomicReq(new AtomB()).pend();
-        } catch (ExpiredAtomException eae) {
-            mailboxFactory.close();
-            return;
-        }
-        throw new IllegalStateException();
     }
 
     public void test3() throws Exception {
@@ -56,69 +43,43 @@ public class AtomicTest extends TestCase {
         try {
             final FifoProcessor fp = new FifoProcessor();
             fp.initialize(mailboxFactory.createAsyncMailbox());
-            fp.atomicReq(new AtomC()).pend();
+            fp.atomicReq(bReq(fp.getMailbox())).pend();
         } catch (UnsupportedOperationException uoe) {
             mailboxFactory.close();
             return;
         }
         throw new IllegalStateException();
     }
+
+    Request<Void> aReq(final AP ap, final int msg) {
+        final Mailbox mailbox = ap.getMailbox();
+        return new RequestBase<Void>(mailbox) {
+            @Override
+            public void processRequest(final ResponseProcessor<Void> _rp) throws Exception {
+                Delay delay = new Delay(mailbox.getMailboxFactory());
+                delay.sleepReq(100 - (msg * 20)).reply(mailbox, new ResponseProcessor<Void>() {
+                    @Override
+                    public void processResponse(Void response) throws Exception {
+                        if (ap.count != msg -1)
+                            throw new IllegalStateException();
+                        ap.count = msg;
+                        _rp.processResponse(null);
+                    }
+                });
+            }
+        };
+    }
+
+    Request<Void> bReq(final Mailbox _mailbox) {
+        return new RequestBase<Void>(_mailbox) {
+            @Override
+            public void processRequest(ResponseProcessor<Void> responseProcessor) throws Exception {
+                throw new UnsupportedOperationException("it happen");
+            }
+        };
+    }
 }
 
 class AP extends FifoProcessor {
     int count = 0;
-}
-
-class AtomA implements Atomic<Void> {
-    final private int msg;
-
-    public AtomA(final int _msg) {
-        this.msg = _msg;
-    }
-
-    @Override
-    public void process(final AtomicProcessorBase _processor, final ResponseProcessor<Void> _rp)
-            throws Exception {
-        final AP ap = (AP) _processor;
-        Mailbox mailbox = ap.getMailbox();
-        Delay delay = new Delay(mailbox.getMailboxFactory());
-        delay.sleepReq(100 - (msg * 20)).reply(mailbox, new ResponseProcessor<Void>() {
-            @Override
-            public void processResponse(Void response) throws Exception {
-                if (ap.count != msg -1)
-                    throw new IllegalStateException();
-                ap.count = msg;
-                _rp.processResponse(null);
-            }
-        });
-    }
-
-    @Override
-    public boolean isExpired() {
-        return false;
-    }
-}
-
-class AtomB implements Atomic<Void> {
-    @Override
-    public void process(AtomicProcessorBase processor, ResponseProcessor<Void> rp) throws Exception {
-        throw new UnsupportedOperationException("shouldn't happen");
-    }
-
-    @Override
-    public boolean isExpired() {
-        return true;
-    }
-}
-
-class AtomC implements Atomic<Void> {
-    @Override
-    public void process(AtomicProcessorBase processor, ResponseProcessor<Void> rp) throws Exception {
-        throw new UnsupportedOperationException("it happen");
-    }
-
-    @Override
-    public boolean isExpired() {
-        return false;
-    }
 }

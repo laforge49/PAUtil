@@ -19,11 +19,11 @@ public abstract class AtomicProcessorBase extends AncestorBase implements Atomic
     }
 
 
-    public Request<?> atomicReq(final Atomic _atom) {
+    public Request<?> atomicReq(final Request _request) {
         return new RequestBase<Object>(getMailbox()) {
             @Override
             public void processRequest(final ResponseProcessor<Object> _rp) throws Exception {
-                entries.offer(new AtomicEntry(_atom, _rp));
+                entries.offer(new AtomicEntry(_request, _rp));
                 process();
             }
         };
@@ -32,7 +32,7 @@ public abstract class AtomicProcessorBase extends AncestorBase implements Atomic
     private void process() throws Exception {
         if (getMailbox().isEmpty() && !entries.isEmpty()) {
             final AtomicEntry entry = entries.remove();
-            final Atomic atom = entry.atom;
+            final Request request = entry.request;
             final ResponseProcessor<Object> _rp = new ResponseProcessor<Object>() {
                 @Override
                 public void processResponse(Object response) throws Exception {
@@ -47,9 +47,7 @@ public abstract class AtomicProcessorBase extends AncestorBase implements Atomic
                 }
             });
             try {
-                if (atom.isExpired())
-                    throw new ExpiredAtomException(atom);
-                atom.process(AtomicProcessorBase.this, _rp);
+                request.reply(getMailbox(), _rp);
             } catch (Exception ex) {
                 _rp.processResponse(ex);
             }
@@ -58,11 +56,11 @@ public abstract class AtomicProcessorBase extends AncestorBase implements Atomic
 }
 
 class AtomicEntry {
-    public Atomic atom;
+    public Request request;
     public ResponseProcessor<Object> rp;
 
-    public AtomicEntry(final Atomic _atom, final ResponseProcessor<Object> _rp) {
-        atom = _atom;
+    public AtomicEntry(final Request _request, final ResponseProcessor<Object> _rp) {
+        request = _request;
         rp = _rp;
     }
 }
