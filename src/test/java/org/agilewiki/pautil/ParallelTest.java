@@ -34,7 +34,7 @@ public class ParallelTest extends TestCase {
                 int i = 0;
                 while (i < LOADS) {
                     final Delay dly = new Delay(mailboxFactory);
-                    dly.sleep(ParallelTest.DELAY).reply(mailbox,
+                    dly.sleepReq(ParallelTest.DELAY).reply(mailbox,
                             responseCounter);
                     i += 1;
                 }

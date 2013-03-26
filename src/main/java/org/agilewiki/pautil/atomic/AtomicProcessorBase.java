@@ -8,25 +8,19 @@ import java.util.Queue;
 
 public abstract class AtomicProcessorBase extends AncestorBase implements AtomicProcessor {
     private Queue<AtomicEntry> entries;
-    private Mailbox autoFlushMailbox;
 
     protected abstract Queue<AtomicEntry> createQueue();
 
     @Override
     public void initialize(final Mailbox _mailbox, final Ancestor _parent) {
         super.initialize(_mailbox, _parent);
-        autoFlushMailbox = _mailbox.autoFlush();
         entries = createQueue();
-    }
-
-    @Override
-    public Mailbox getMailbox() {
-        return autoFlushMailbox;
+        _mailbox.setNoBuffering();
     }
 
 
     public Request<?> atomicReq(final Atomic _atom) {
-        return new RequestBase<Object>(autoFlushMailbox) {
+        return new RequestBase<Object>(getMailbox()) {
             @Override
             public void processRequest(final ResponseProcessor<Object> _rp) throws Exception {
                 entries.offer(new AtomicEntry(_atom, _rp));
@@ -36,7 +30,7 @@ public abstract class AtomicProcessorBase extends AncestorBase implements Atomic
     }
 
     private void process() throws Exception {
-        if (autoFlushMailbox.isEmpty() && !entries.isEmpty()) {
+        if (getMailbox().isEmpty() && !entries.isEmpty()) {
             final AtomicEntry entry = entries.remove();
             final Atomic atom = entry.atom;
             final ResponseProcessor<Object> _rp = new ResponseProcessor<Object>() {
@@ -46,7 +40,7 @@ public abstract class AtomicProcessorBase extends AncestorBase implements Atomic
                     process();
                 }
             };
-            autoFlushMailbox.setExceptionHandler(new ExceptionHandler() {
+            getMailbox().setExceptionHandler(new ExceptionHandler() {
                 @Override
                 public void processException(Throwable throwable) throws Exception {
                     _rp.processResponse(throwable);

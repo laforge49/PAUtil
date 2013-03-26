@@ -38,7 +38,7 @@ public class SemaphoreTest extends TestCase {
             public void processRequest(
                     final ResponseProcessor<Void> responseProcessor)
                     throws Exception {
-                new Delay(mailboxFactory).sleep(delay).reply(getMailbox(),
+                new Delay(mailboxFactory).sleepReq(delay).reply(getMailbox(),
                         new ResponseProcessor<Void>() {
                             @Override
                             public void processResponse(final Void response)

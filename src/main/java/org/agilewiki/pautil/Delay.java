@@ -9,7 +9,7 @@ public class Delay {
         this.mailbox = mailboxFactory.createAsyncMailbox();
     }
 
-    public Request<Void> sleep(final long delay) {
+    public Request<Void> sleepReq(final long delay) {
         return new RequestBase<Void>(mailbox) {
             @Override
             public void processRequest(
