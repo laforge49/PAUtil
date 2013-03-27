@@ -8,6 +8,7 @@ import java.util.Queue;
 
 public abstract class AtomicRequestProcessorBase extends AncestorBase implements AtomicRequestProcessor {
     private Queue<AtomicEntry> entries;
+    private Mailbox mailbox;
 
     protected abstract Queue<AtomicEntry> createQueue();
 
@@ -15,12 +16,12 @@ public abstract class AtomicRequestProcessorBase extends AncestorBase implements
     public void initialize(final Mailbox _mailbox, final Ancestor _parent) {
         super.initialize(_mailbox, _parent);
         entries = createQueue();
-        _mailbox.setNoBuffering();
+        mailbox = _mailbox;
     }
 
 
     public Request<?> atomicReq(final Request _request) {
-        return new RequestBase<Object>(getMailbox()) {
+        return new RequestBase<Object> (mailbox) {
             @Override
             public void processRequest(final ResponseProcessor<Object> _rp) throws Exception {
                 entries.offer(new AtomicEntry(_request, _rp));
@@ -30,7 +31,7 @@ public abstract class AtomicRequestProcessorBase extends AncestorBase implements
     }
 
     private void process() throws Exception {
-        if (getMailbox().isEmpty() && !entries.isEmpty()) {
+        if (mailbox.isEmpty() && !entries.isEmpty()) {
             final AtomicEntry entry = entries.remove();
             final Request request = entry.request;
             final ResponseProcessor<Object> _rp = new ResponseProcessor<Object>() {
@@ -40,14 +41,15 @@ public abstract class AtomicRequestProcessorBase extends AncestorBase implements
                     process();
                 }
             };
-            getMailbox().setExceptionHandler(new ExceptionHandler() {
+            mailbox.setExceptionHandler(new ExceptionHandler() {
                 @Override
                 public void processException(Throwable throwable) throws Exception {
                     _rp.processResponse(throwable);
                 }
             });
             try {
-                request.reply(getMailbox(), _rp);
+                request.reply(mailbox, _rp);
+                mailbox.flush();
             } catch (Exception ex) {
                 _rp.processResponse(ex);
             }
