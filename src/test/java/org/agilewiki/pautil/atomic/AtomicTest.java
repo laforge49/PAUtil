@@ -10,7 +10,7 @@ public class AtomicTest extends TestCase {
     public void test1() throws Exception {
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         try {
-            int count = startReq1(mailboxFactory.createAsyncMailbox()).pend();
+            int count = startReq1(mailboxFactory.createMailbox()).pend();
             assertEquals(5, count);
         } finally {
             mailboxFactory.close();
@@ -22,7 +22,7 @@ public class AtomicTest extends TestCase {
             @Override
             public void processRequest(final ResponseProcessor<Integer> _rp) throws Exception {
                 final AP ap = new AP();
-                ap.initialize(getMailbox().createAsyncMailbox());
+                ap.initialize(getMailbox().createMailbox());
                 ResponseProcessor rc = new ResponseCounter(5, null, new ResponseProcessor() {
                     @Override
                     public void processResponse(Object response) throws Exception {
@@ -38,11 +38,11 @@ public class AtomicTest extends TestCase {
         };
     }
 
-    public void test3() throws Exception {
+    public void test2() throws Exception {
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         try {
             final FifoRequestProcessor fp = new FifoRequestProcessor();
-            fp.initialize(mailboxFactory.createAsyncMailbox());
+            fp.initialize(mailboxFactory.createMailbox());
             fp.atomicReq(bReq(fp.getMailbox())).pend();
         } catch (UnsupportedOperationException uoe) {
             mailboxFactory.close();
