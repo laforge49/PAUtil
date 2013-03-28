@@ -6,8 +6,7 @@ public class Delay {
     private final Mailbox mailbox;
 
     public Delay(final MailboxFactory mailboxFactory) {
-        mailbox = mailboxFactory.createMailbox();
-        mailbox.disableCommandeering();
+        mailbox = mailboxFactory.createMailbox(true);
     }
 
     public Request<Void> sleepReq(final long delay) {
