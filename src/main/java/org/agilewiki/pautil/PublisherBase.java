@@ -11,7 +11,7 @@ public class PublisherBase<TARGET_ACTOR_TYPE extends Actor>
     private Set<TARGET_ACTOR_TYPE> subscribers = new HashSet<TARGET_ACTOR_TYPE>();
 
     @Override
-    public Request<Boolean> subscribeRequest(final TARGET_ACTOR_TYPE _subscriber){
+    public Request<Boolean> subscribeReq(final TARGET_ACTOR_TYPE _subscriber){
         return new RequestBase<Boolean>(getMailbox()) {
             @Override
             public void processRequest(final ResponseProcessor<Boolean> _rp) throws Exception {
@@ -21,7 +21,7 @@ public class PublisherBase<TARGET_ACTOR_TYPE extends Actor>
     }
 
     @Override
-    public Request<Boolean> unsubscribeRequest(final TARGET_ACTOR_TYPE _subscriber) {
+    public Request<Boolean> unsubscribeReq(final TARGET_ACTOR_TYPE _subscriber) {
         return new RequestBase<Boolean>(getMailbox()) {
             @Override
             public void processRequest(final ResponseProcessor<Boolean> _rp) throws Exception {
@@ -31,7 +31,7 @@ public class PublisherBase<TARGET_ACTOR_TYPE extends Actor>
     }
 
     @Override
-    public Request<Void> publish(final UnboundRequest<Void, TARGET_ACTOR_TYPE> event) {
+    public Request<Void> publishReq(final UnboundRequest<Void, TARGET_ACTOR_TYPE> event) {
         return new RequestBase<Void>(getMailbox()) {
             @Override
             public void processRequest(final ResponseProcessor<Void> _rp) throws Exception {
