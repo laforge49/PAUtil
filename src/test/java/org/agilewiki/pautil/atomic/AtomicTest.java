@@ -22,7 +22,7 @@ public class AtomicTest extends TestCase {
             @Override
             public void processRequest(final ResponseProcessor<Integer> _rp) throws Exception {
                 final AP ap = new AP();
-                ap.initialize(getMailbox().createMailbox());
+                ap.initialize(getMailbox().createMailbox(true, true));
                 ResponseProcessor rc = new ResponseCounter(5, null, new ResponseProcessor() {
                     @Override
                     public void processResponse(Object response) throws Exception {
@@ -42,7 +42,7 @@ public class AtomicTest extends TestCase {
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         try {
             final FifoRequestProcessor fp = new FifoRequestProcessor();
-            fp.initialize(mailboxFactory.createMailbox());
+            fp.initialize(mailboxFactory.createMailbox(true, true));
             fp.atomicReq(bReq(fp.getMailbox())).call();
         } catch (UnsupportedOperationException uoe) {
             mailboxFactory.close();
