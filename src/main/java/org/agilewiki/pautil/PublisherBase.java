@@ -37,7 +37,13 @@ public class PublisherBase<TARGET_ACTOR_TYPE extends Actor>
             public void processRequest(final ResponseProcessor<Void> _rp) throws Exception {
                 Set<TARGET_ACTOR_TYPE> subs = new HashSet<TARGET_ACTOR_TYPE>(subscribers);
                 Iterator<TARGET_ACTOR_TYPE> it = subs.iterator();
-                ResponseCounter<Void> rc = new ResponseCounter<Void>(subs.size(), null, _rp);
+                final ResponseCounter<Void> rc = new ResponseCounter<Void>(subs.size(), null, _rp);
+                getMailbox().setExceptionHandler(new ExceptionHandler() {
+                    @Override
+                    public void processException(Throwable throwable) throws Exception {
+                        rc.decrementCount();
+                    }
+                });
                 while (it.hasNext()) {
                     TARGET_ACTOR_TYPE subscriber = it.next();
                     event.send(getMailbox(), subscriber, rc);
