@@ -48,7 +48,7 @@ public abstract class AtomicRequestProcessorBase extends AncestorBase implements
                 }
             });
             try {
-                request.reply(mailbox, _rp);
+                request.send(mailbox, _rp);
                 mailbox.flush();
             } catch (Exception ex) {
                 _rp.processResponse(ex);

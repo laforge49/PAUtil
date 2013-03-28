@@ -29,11 +29,11 @@ public class AtomicTest extends TestCase {
                         _rp.processResponse(ap.count);
                     }
                 });
-                ap.atomicReq(aReq(ap, 1)).reply(_mailbox, rc);
-                ap.atomicReq(aReq(ap, 2)).reply(_mailbox, rc);
-                ap.atomicReq(aReq(ap, 3)).reply(_mailbox, rc);
-                ap.atomicReq(aReq(ap, 4)).reply(_mailbox, rc);
-                ap.atomicReq(aReq(ap, 5)).reply(_mailbox, rc);
+                ap.atomicReq(aReq(ap, 1)).send(_mailbox, rc);
+                ap.atomicReq(aReq(ap, 2)).send(_mailbox, rc);
+                ap.atomicReq(aReq(ap, 3)).send(_mailbox, rc);
+                ap.atomicReq(aReq(ap, 4)).send(_mailbox, rc);
+                ap.atomicReq(aReq(ap, 5)).send(_mailbox, rc);
             }
         };
     }
@@ -57,7 +57,7 @@ public class AtomicTest extends TestCase {
             @Override
             public void processRequest(final ResponseProcessor<Void> _rp) throws Exception {
                 Delay delay = new Delay(mailbox.getMailboxFactory());
-                delay.sleepReq(100 - (msg * 20)).reply(mailbox, new ResponseProcessor<Void>() {
+                delay.sleepReq(100 - (msg * 20)).send(mailbox, new ResponseProcessor<Void>() {
                     @Override
                     public void processResponse(Void response) throws Exception {
                         if (ap.count != msg -1)
