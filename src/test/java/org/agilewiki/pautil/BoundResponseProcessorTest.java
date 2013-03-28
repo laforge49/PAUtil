@@ -16,7 +16,7 @@ public class BoundResponseProcessorTest extends TestCase {
         try {
             final Driver driver = new Driver();
             driver.initialize(mailboxFactory.createMailbox());
-            assertEquals("Hello world!", driver.doitReq().pend());
+            assertEquals("Hello world!", driver.doitReq().call());
         } finally {
             mailboxFactory.close();
         }

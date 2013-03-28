@@ -10,7 +10,7 @@ public class AtomicTest extends TestCase {
     public void test1() throws Exception {
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         try {
-            int count = startReq1(mailboxFactory.createMailbox()).pend();
+            int count = startReq1(mailboxFactory.createMailbox()).call();
             assertEquals(5, count);
         } finally {
             mailboxFactory.close();
@@ -43,7 +43,7 @@ public class AtomicTest extends TestCase {
         try {
             final FifoRequestProcessor fp = new FifoRequestProcessor();
             fp.initialize(mailboxFactory.createMailbox());
-            fp.atomicReq(bReq(fp.getMailbox())).pend();
+            fp.atomicReq(bReq(fp.getMailbox())).call();
         } catch (UnsupportedOperationException uoe) {
             mailboxFactory.close();
             return;

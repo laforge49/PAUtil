@@ -18,7 +18,7 @@ public class SemaphoreTest extends TestCase {
         final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         final Semaphore semaphore = new Semaphore(
                 mailboxFactory.createMailbox(), 1);
-        semaphore.acquire.pend();
+        semaphore.acquire.call();
         mailboxFactory.close();
     }
 
@@ -26,8 +26,8 @@ public class SemaphoreTest extends TestCase {
         final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         final Semaphore semaphore = new Semaphore(
                 mailboxFactory.createMailbox(), 0);
-        semaphore.release.send();
-        semaphore.acquire.pend();
+        semaphore.release.signal();
+        semaphore.acquire.call();
         mailboxFactory.close();
     }
 
@@ -43,7 +43,7 @@ public class SemaphoreTest extends TestCase {
                             @Override
                             public void processResponse(final Void response)
                                     throws Exception {
-                                semaphore.release.send();
+                                semaphore.release.signal();
                                 responseProcessor.processResponse(null);
                             }
                         });
@@ -57,8 +57,8 @@ public class SemaphoreTest extends TestCase {
                 mailboxFactory.createMailbox(), 0);
         final long d = 100;
         final long t0 = System.currentTimeMillis();
-        delayedRelease(semaphore, d, mailboxFactory).send();
-        semaphore.acquire.pend();
+        delayedRelease(semaphore, d, mailboxFactory).signal();
+        semaphore.acquire.call();
         final long t1 = System.currentTimeMillis();
         assertTrue(t1 - t0 >= d);
         mailboxFactory.close();
@@ -96,9 +96,9 @@ public class SemaphoreTest extends TestCase {
                 mailboxFactory.createMailbox(), 0);
         final long d = 100;
         final long t0 = System.currentTimeMillis();
-        delayedRelease(semaphore, d, mailboxFactory).send();
+        delayedRelease(semaphore, d, mailboxFactory).signal();
         final boolean result = acquireException(semaphore,
-                mailboxFactory.createMailbox()).pend();
+                mailboxFactory.createMailbox()).call();
         final long t1 = System.currentTimeMillis();
         assertTrue(t1 - t0 >= d);
         assertTrue(result);

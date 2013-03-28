@@ -42,7 +42,7 @@ public class ParallelTest extends TestCase {
         };
 
         final long t0 = System.currentTimeMillis();
-        start.pend();
+        start.call();
         final long t1 = System.currentTimeMillis();
         assertTrue((t1 - t0) < DELAY + DELAY / 2);
         mailboxFactory.close();

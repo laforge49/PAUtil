@@ -17,13 +17,13 @@ public class BoundResponseProcessor<RESPONSE_TYPE> implements
 
     @Override
     public void processResponse(final RESPONSE_TYPE rsp) throws Exception {
-        new ContinuationRequest<RESPONSE_TYPE>(targetMailbox, rp, rsp).send();
+        new ContinuationRequest<RESPONSE_TYPE>(targetMailbox, rp, rsp).signal();
     }
 
     public void processResponse(final Mailbox source, final RESPONSE_TYPE rsp)
             throws Exception {
         new ContinuationRequest<RESPONSE_TYPE>(targetMailbox, rp, rsp)
-                .send(source);
+                .signal(source);
     }
 }
 
