@@ -22,7 +22,7 @@ public class AtomicTest extends TestCase {
             @Override
             public void processRequest(final ResponseProcessor<Integer> _rp) throws Exception {
                 final AP ap = new AP();
-                ap.initialize(getMailbox().createMailbox(true, true));
+                ap.initialize(getMailbox().getMailboxFactory().createMailbox(true, ap));
                 ResponseProcessor rc = new ResponseCounter(5, null, new ResponseProcessor() {
                     @Override
                     public void processResponse(Object response) throws Exception {
@@ -38,19 +38,6 @@ public class AtomicTest extends TestCase {
         };
     }
 
-    public void test2() throws Exception {
-        MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
-        try {
-            final FifoRequestProcessor fp = new FifoRequestProcessor();
-            fp.initialize(mailboxFactory.createMailbox(true, true));
-            fp.atomicReq(bReq(fp.getMailbox())).call();
-        } catch (UnsupportedOperationException uoe) {
-            mailboxFactory.close();
-            return;
-        }
-        throw new IllegalStateException();
-    }
-
     Request<Void> aReq(final AP ap, final int msg) {
         final Mailbox mailbox = ap.getMailbox();
         return new RequestBase<Void>(mailbox) {
@@ -60,7 +47,7 @@ public class AtomicTest extends TestCase {
                 delay.sleepReq(100 - (msg * 20)).send(mailbox, new ResponseProcessor<Void>() {
                     @Override
                     public void processResponse(Void response) throws Exception {
-                        if (ap.count != msg -1)
+                        if (ap.count != msg - 1)
                             throw new IllegalStateException();
                         ap.count = msg;
                         _rp.processResponse(null);
@@ -68,6 +55,19 @@ public class AtomicTest extends TestCase {
                 });
             }
         };
+    }
+
+    public void test2() throws Exception {
+        MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
+        try {
+            final FifoRequestProcessor fp = new FifoRequestProcessor();
+            fp.initialize(mailboxFactory.createMailbox(true, fp));
+            fp.atomicReq(bReq(fp.getMailbox())).call();
+        } catch (UnsupportedOperationException uoe) {
+            mailboxFactory.close();
+            return;
+        }
+        throw new IllegalStateException();
     }
 
     Request<Void> bReq(final Mailbox _mailbox) {

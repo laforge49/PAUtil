@@ -6,9 +6,11 @@ import org.agilewiki.pautil.AncestorBase;
 
 import java.util.Queue;
 
-public abstract class AtomicRequestProcessorBase extends AncestorBase implements AtomicRequestProcessor {
+public abstract class AtomicRequestProcessorBase
+        extends AncestorBase implements AtomicRequestProcessor {
     private Queue<AtomicEntry> entries;
     private Mailbox mailbox;
+    private boolean busy;
 
     protected abstract Queue<AtomicEntry> createQueue();
 
@@ -25,33 +27,36 @@ public abstract class AtomicRequestProcessorBase extends AncestorBase implements
             @Override
             public void processRequest(final ResponseProcessor<Object> _rp) throws Exception {
                 entries.offer(new AtomicEntry(_request, _rp));
-                process();
             }
         };
     }
 
-    private void process() throws Exception {
-        if (mailbox.isEmpty() && !entries.isEmpty()) {
+    public void run() {
+        if (!busy && !entries.isEmpty()) {
             final AtomicEntry entry = entries.remove();
             final Request request = entry.request;
             final ResponseProcessor<Object> _rp = new ResponseProcessor<Object>() {
                 @Override
                 public void processResponse(Object response) throws Exception {
+                    busy = false;
                     entry.rp.processResponse(response);
-                    process();
                 }
             };
             mailbox.setExceptionHandler(new ExceptionHandler() {
                 @Override
                 public void processException(Throwable throwable) throws Exception {
+                    busy = false;
                     _rp.processResponse(throwable);
                 }
             });
+            busy = true;
             try {
                 request.send(mailbox, _rp);
-                mailbox.flush();
             } catch (Exception ex) {
-                _rp.processResponse(ex);
+                try {
+                    busy = false;
+                    _rp.processResponse(ex);
+                } catch (Exception ex2) {}
             }
         }
     }
