@@ -6,22 +6,44 @@ import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 public class PAIteratorTest extends TestCase {
     private Mailbox mailbox;
+    private Mailbox counterMailbox;
     private long runs;
 
-    public void test() throws Exception {
-        runs = 100000000;
+    public void test1() throws Exception {
+        runs = 100;
 
 //                shared mailbox test
-//                [java-shared] Number of runs: 100000000
-//                [java-shared] Count: 100000000
-//                [java-shared] Test time in milliseconds: 4080
-//                [java-shared] Messages per second: 24,509,803
+//                Number of runs: 100,000,000
+//                Count: 100,000,000
+//                Test time in milliseconds: 4080
+//                Messages per second: 24,509,803
 
 
         System.out.println("shared mailbox test");
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         try {
             mailbox = mailboxFactory.createMailbox();
+            counterMailbox = mailbox;
+            runReq().call();
+        } finally {
+            mailboxFactory.close();
+        }
+    }
+
+    public void test2() throws Exception {
+        runs = 1000000;
+
+//        async mailbox test
+//        Number of runs: 1,000,000
+//        Count: 1,000,000
+//        Test time in milliseconds: 6128
+//        Messages per second: 163,185
+
+        System.out.println("async mailbox test");
+        MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
+        try {
+            mailbox = mailboxFactory.createMailbox();
+            counterMailbox = mailboxFactory.createMailbox(true);
             runReq().call();
         } finally {
             mailboxFactory.close();
@@ -33,7 +55,7 @@ public class PAIteratorTest extends TestCase {
             @Override
             public void processRequest(final ResponseProcessor<Void> _rp) throws Exception {
                 final CounterActor counterActor = new CounterActor();
-                counterActor.initialize(mailbox);
+                counterActor.initialize(counterMailbox);
                 final UnboundAddReq uar = new UnboundAddReq(1);
                 final UnboundResetReq urr = new UnboundResetReq();
                 PAIterator pait = new PAIterator() {
@@ -57,11 +79,11 @@ public class PAIteratorTest extends TestCase {
                             public void processResponse(final Long count) throws Exception {
                                 long finish = System.currentTimeMillis();
                                 long elapsedTime = finish - start;
-                                System.out.println("[java-shared] Number of runs: " + runs);
-                                System.out.println("[java-shared] Count: " + count);
-                                System.out.println("[java-shared] Test time in milliseconds: " + elapsedTime);
+                                System.out.println("Number of runs: " + runs);
+                                System.out.println("Count: " + count);
+                                System.out.println("Test time in milliseconds: " + elapsedTime);
                                 if (elapsedTime > 0)
-                                    System.out.println("[java-shared] Messages per second: " + (runs * 1000 / elapsedTime));
+                                    System.out.println("Messages per second: " + (runs * 1000 / elapsedTime));
                                 _rp.processResponse(null);
                             }
                         });
