@@ -86,29 +86,18 @@ abstract public class PAIterator {
      */
     public void iterate(final ResponseProcessor responseProcessor)
             throws Exception {
-        final ExtendedResponseProcessor erp = new ExtendedResponseProcessor() {
+        final ResponseProcessor erp = new ResponseProcessor() {
             @Override
             public void processResponse(final Object response) throws Exception {
                 if (response == null) {
-                    if (!async) {
-                        sync = true;
-                    } else {
-                        iterate(responseProcessor); //not recursive
-                    }
+                    iterate(responseProcessor); //not recursive
                 }/* else if (response instanceof JANull)
                     responseProcessor.processResponse(null);*/
                 else
                     responseProcessor.processResponse(response);
             }
         };
-        erp.sync = true;
-        while (erp.sync) {
-            erp.sync = false;
-            process(erp);
-            if (!erp.sync) {
-                erp.async = true;
-            }
-        }
+        process(erp);
     }
 
     /**

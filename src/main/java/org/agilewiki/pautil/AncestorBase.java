@@ -19,7 +19,7 @@ public class AncestorBase extends ActorBase implements Ancestor {
         return null;
     }
 
-    protected Ancestor parent;
+    private Ancestor parent;
 
     public void initialize(final Ancestor _parent) {
         initialize(null, _parent);
