@@ -31,13 +31,13 @@ public class PAIteratorTest extends TestCase {
     }
 
     public void test2() throws Exception {
-        runs = 1000000;
+        runs = 10;
 
 //        async mailbox test
-//        Number of runs: 1,000,000
-//        Count: 1,000,000
-//        Test time in milliseconds: 6128
-//        Messages per second: 163,185
+//        Number of runs: 1000000
+//        Count: 1000000
+//       Test time in milliseconds: 691
+//        Messages per second: 1,447,178
 
         System.out.println("async mailbox test");
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
