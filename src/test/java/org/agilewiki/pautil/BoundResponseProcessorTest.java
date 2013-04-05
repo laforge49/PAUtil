@@ -31,7 +31,7 @@ class Driver extends ActorBase {
     }
 
     @Override
-    public void initialize(final Mailbox _mailbox) {
+    public void initialize(final Mailbox _mailbox) throws Exception {
         super.initialize(_mailbox);
 
         doitReq = new RequestBase<String>(_mailbox) {

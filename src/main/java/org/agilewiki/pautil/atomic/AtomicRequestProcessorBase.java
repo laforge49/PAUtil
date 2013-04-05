@@ -15,7 +15,7 @@ public abstract class AtomicRequestProcessorBase
     protected abstract Queue<AtomicEntry> createQueue();
 
     @Override
-    public void initialize(final Mailbox _mailbox, final Ancestor _parent) {
+    public void initialize(final Mailbox _mailbox, final Ancestor _parent) throws Exception {
         super.initialize(_mailbox, _parent);
         entries = createQueue();
         mailbox = _mailbox;
