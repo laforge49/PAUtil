@@ -22,8 +22,11 @@ public class PropertiesImpl extends AncestorBase implements Properties {
     public static Object getProperty(final Ancestor child, final String propertyName)
             throws Exception {
         Properties properties = getMatch(child);
-        if (properties == null)
-            throw new UnsupportedOperationException("no Properties ancestor");
+        if (properties == null) {
+            properties = child.getMailbox().getMailboxFactory().getProperties();
+            if (properties == null)
+                throw new UnsupportedOperationException("no Properties ancestor");
+        }
         return properties.getProperty(propertyName);
     }
 
