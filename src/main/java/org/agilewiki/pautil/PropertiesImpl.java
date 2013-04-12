@@ -1,5 +1,7 @@
 package org.agilewiki.pautil;
 
+import org.agilewiki.pactor.Properties;
+
 import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
