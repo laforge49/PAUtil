@@ -1,6 +1,8 @@
 package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
+import org.agilewiki.pactor.Actor;
+import org.agilewiki.pactor.ActorBase;
 import org.agilewiki.pactor.MailboxFactory;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
@@ -12,13 +14,16 @@ public class PropertiesTest extends TestCase {
             p1.initialize(mailboxFactory.createMailbox());
             PropertiesImpl p2 = new PropertiesImpl();
             p2.initialize(p1.getMailbox(), p1);
-            PropertiesImpl.setProperty(p1, "a", "foo");
-            PropertiesImpl.setProperty(p2, "b", "bar");
-            String a = (String) PropertiesImpl.getProperty(p2, "a");
+            mailboxFactory.setProperties(p2);
+            PropertiesImpl.putProperty(p1, "a", "foo");
+            PropertiesImpl.putProperty(p2, "b", "bar");
+            AncestorBase z = new AncestorBase();
+            z.initialize(mailboxFactory.createMailbox());
+            String a = (String) PropertiesImpl.getProperty(z, "a");
             assertEquals("foo", a);
-            String b = (String) PropertiesImpl.getProperty(p2, "b");
+            String b = (String) PropertiesImpl.getProperty(z, "b");
             assertEquals("bar", b);
-            String c = (String) PropertiesImpl.getProperty(p2, "c");
+            String c = (String) PropertiesImpl.getProperty(z, "c");
             assertNull(c);
         } finally {
             mailboxFactory.close();

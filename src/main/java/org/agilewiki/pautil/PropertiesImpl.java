@@ -30,7 +30,7 @@ public class PropertiesImpl extends AncestorBase implements Properties {
         return properties.getProperty(propertyName);
     }
 
-    public static void setProperty(final Ancestor child, final String propertyName, final Object propertyValue)
+    public static void putProperty(final Ancestor child, final String propertyName, final Object propertyValue)
             throws Exception {
         Properties properties = getMatch(child);
         if (properties == null) {
@@ -38,7 +38,7 @@ public class PropertiesImpl extends AncestorBase implements Properties {
             if (properties == null)
                 throw new UnsupportedOperationException("no Properties ancestor");
         }
-        properties.setProperty(propertyName, propertyValue);
+        properties.putProperty(propertyName, propertyValue);
     }
 
     /**
@@ -58,7 +58,7 @@ public class PropertiesImpl extends AncestorBase implements Properties {
     }
 
     @Override
-    public void setProperty(final String propertyName, final Object propertyValue) throws Exception {
+    public void putProperty(final String propertyName, final Object propertyValue) throws Exception {
         properties.put(propertyName, propertyValue);
     }
 }
