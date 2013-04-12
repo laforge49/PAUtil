@@ -33,8 +33,11 @@ public class PropertiesImpl extends AncestorBase implements Properties {
     public static void setProperty(final Ancestor child, final String propertyName, final Object propertyValue)
             throws Exception {
         Properties properties = getMatch(child);
-        if (properties == null)
-            throw new UnsupportedOperationException("no Properties ancestor");
+        if (properties == null) {
+            properties = child.getMailbox().getMailboxFactory().getProperties();
+            if (properties == null)
+                throw new UnsupportedOperationException("no Properties ancestor");
+        }
         properties.setProperty(propertyName, propertyValue);
     }
 
