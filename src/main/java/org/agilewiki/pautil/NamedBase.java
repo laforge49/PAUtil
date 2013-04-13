@@ -7,7 +7,7 @@ public class NamedBase extends AncestorBase implements Named {
     private String actorName;
 
     @Override
-    public String getActorName() throws Exception {
+    public String getActorName() {
         return actorName;
     }
 

@@ -9,6 +9,5 @@ public interface Named extends Ancestor {
      *
      * @return The actor name, or null.
      */
-    public String getActorName()
-            throws Exception;
+    public String getActorName();
 }
