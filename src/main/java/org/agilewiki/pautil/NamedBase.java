@@ -2,12 +2,19 @@ package org.agilewiki.pautil;
 
 import org.agilewiki.pactor.ActorBase;
 
+/**
+ * Implements Named with an effectively final value.
+ */
 public class NamedBase extends ActorBase implements Named {
     /**
      * The actor name, or null.
      */
     private String actorName;
 
+    /**
+     * Returns the immutable actor name.
+     * @return The actor name, or null.
+     */
     @Override
     public String getActorName() {
         return actorName;
