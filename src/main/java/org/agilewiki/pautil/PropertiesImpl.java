@@ -2,6 +2,8 @@ package org.agilewiki.pautil;
 
 import org.agilewiki.pactor.Properties;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
@@ -60,5 +62,10 @@ public class PropertiesImpl extends AncestorBase implements Properties {
     @Override
     public void putProperty(final String propertyName, final Object propertyValue) throws Exception {
         properties.put(propertyName, propertyValue);
+    }
+
+    @Override
+    public Iterator<Map.Entry<String, Object>> iterator() {
+        return properties.entrySet().iterator();
     }
 }
