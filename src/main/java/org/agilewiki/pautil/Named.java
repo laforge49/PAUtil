@@ -1,9 +1,11 @@
 package org.agilewiki.pautil;
 
+import org.agilewiki.pactor.Actor;
+
 /**
  * Immutable actor names.
  */
-public interface Named extends Ancestor {
+public interface Named extends Actor {
     /**
      * Returns the actor name, or null.
      *

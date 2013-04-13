@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * found and its parent also has a Properties component, then the request is passed up to
  * the parent.
  */
-public class PropertiesImpl extends AncestorBase implements Properties {
+public class PAProperties extends AncestorBase implements Properties {
 
     public static Properties getAncestor(final Ancestor child) {
         return (Properties) getAncestor(child, Properties.class);

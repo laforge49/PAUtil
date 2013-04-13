@@ -1,6 +1,7 @@
 package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
+import org.agilewiki.pactor.ActorBase;
 import org.agilewiki.pactor.MailboxFactory;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
@@ -10,7 +11,7 @@ public class NamedTest extends TestCase {
         try {
             NamedBase a = new NamedBase();
             a.initialize(mailboxFactory.createMailbox());
-            a.configure("foo");
+            a.setActorName("foo");
             String nm = a.getActorName();
             assertEquals("foo", nm);
         } finally {

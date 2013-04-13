@@ -1,6 +1,8 @@
 package org.agilewiki.pautil;
 
-public class NamedBase extends AncestorBase implements Named {
+import org.agilewiki.pactor.ActorBase;
+
+public class NamedBase extends ActorBase implements Named {
     /**
      * The actor name, or null.
      */
@@ -16,7 +18,7 @@ public class NamedBase extends AncestorBase implements Named {
      *
      * @param _actorName The actor name.
      */
-    public void configure(final String _actorName) throws Exception {
+    public void setActorName(final String _actorName) throws Exception {
         if (actorName != null)
             throw new UnsupportedOperationException("Already named: " + actorName);
         actorName = _actorName;

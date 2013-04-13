@@ -14,15 +14,15 @@ public class PublisherTest extends TestCase {
             p.initialize(mailboxFactory.createMailbox());
             Printer a = new Printer();
             a.initialize(mailboxFactory.createMailbox());
-            a.configure("a");
+            a.setActorName("a");
             p.subscribeReq(a).call();
             Printer b = new Printer();
             b.initialize(mailboxFactory.createMailbox());
-            b.configure("b");
+            b.setActorName("b");
             p.subscribeReq(b).call();
             Printer c = new Printer();
             c.initialize(mailboxFactory.createMailbox());
-            c.configure("c");
+            c.setActorName("c");
             p.subscribeReq(c).call();
             p.publishReq(new Print("42")).call();
             p.publishReq(new Print("24")).call();
