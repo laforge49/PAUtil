@@ -18,7 +18,7 @@ public class SemaphoreTest extends TestCase {
         final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         final Semaphore semaphore = new Semaphore(
                 mailboxFactory.createMailbox(), 1);
-        semaphore.acquire.call();
+        semaphore.acquireReq().call();
         mailboxFactory.close();
     }
 
@@ -26,8 +26,8 @@ public class SemaphoreTest extends TestCase {
         final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         final Semaphore semaphore = new Semaphore(
                 mailboxFactory.createMailbox(), 0);
-        semaphore.release.signal();
-        semaphore.acquire.call();
+        semaphore.releaseReq().signal();
+        semaphore.acquireReq().call();
         mailboxFactory.close();
     }
 
@@ -43,7 +43,7 @@ public class SemaphoreTest extends TestCase {
                             @Override
                             public void processResponse(final Void response)
                                     throws Exception {
-                                semaphore.release.signal();
+                                semaphore.releaseReq().signal();
                                 responseProcessor.processResponse(null);
                             }
                         });
@@ -58,7 +58,7 @@ public class SemaphoreTest extends TestCase {
         final long d = 100;
         final long t0 = System.currentTimeMillis();
         delayedRelease(semaphore, d, mailboxFactory).signal();
-        semaphore.acquire.call();
+        semaphore.acquireReq().call();
         final long t1 = System.currentTimeMillis();
         assertTrue(t1 - t0 >= d);
         mailboxFactory.close();
@@ -79,7 +79,7 @@ public class SemaphoreTest extends TestCase {
                         responseProcessor.processResponse(true);
                     }
                 });
-                semaphore.acquire.send(mailbox, new ResponseProcessor<Void>() {
+                semaphore.acquireReq().send(mailbox, new ResponseProcessor<Void>() {
                     @Override
                     public void processResponse(final Void response)
                             throws Exception {

@@ -15,8 +15,8 @@ public class Semaphore {
     private final Mailbox mailbox;
     private int permits;
     private final Queue<ResponseProcessor<Void>> queue = new ArrayDeque<ResponseProcessor<Void>>();
-    public final Request<Void> acquire;
-    public final Request<Void> release;
+    private final Request<Void> acquire;
+    private final Request<Void> release;
 
     public Semaphore(final Mailbox mbox, final int permitCount) {
         this.mailbox = mbox;
@@ -50,5 +50,13 @@ public class Semaphore {
                 responseProcessor.processResponse(null);
             }
         };
+    }
+
+    public Request<Void> acquireReq() {
+        return acquire;
+    }
+
+    public Request<Void> releaseReq() {
+        return release;
     }
 }
