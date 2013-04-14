@@ -9,13 +9,13 @@ public class Delay {
         mailbox = mailboxFactory.createMailbox(true);
     }
 
-    public Request<Void> sleepReq(final long delay) {
+    public Request<Void> sleepReq(final long _delay) {
         return new RequestBase<Void>(mailbox) {
             @Override
             public void processRequest(
                     final ResponseProcessor<Void> responseProcessor)
                     throws Exception {
-                Thread.sleep(delay);
+                Thread.sleep(_delay);
                 responseProcessor.processResponse(null);
             }
         };
