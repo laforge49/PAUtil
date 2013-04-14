@@ -51,6 +51,9 @@ public class Publisher<TARGET_ACTOR_TYPE extends Actor> extends
 
     /**
      * A request to publish an unbound request to all the subscribers.
+     * The request completes with a null result only when all subscribers have processed the
+     * unbound request.
+     * Exceptions thrown by subscribers when processign the unbound request are simply ignored.
      *
      * @param unboundRequest The request to be published.
      * @return The request.
