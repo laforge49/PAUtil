@@ -10,7 +10,7 @@ import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 public class SemaphoreTest extends TestCase {
     public void testI() throws Exception {
         final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
-        final Semaphore semaphore = new Semaphore(
+        final PASemaphore semaphore = new PASemaphore(
                 mailboxFactory.createMailbox(), 1);
         semaphore.acquireReq().call();
         mailboxFactory.close();
@@ -18,14 +18,14 @@ public class SemaphoreTest extends TestCase {
 
     public void testII() throws Exception {
         final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
-        final Semaphore semaphore = new Semaphore(
+        final PASemaphore semaphore = new PASemaphore(
                 mailboxFactory.createMailbox(), 0);
         semaphore.releaseReq().signal();
         semaphore.acquireReq().call();
         mailboxFactory.close();
     }
 
-    private Request<Void> delayedRelease(final Semaphore semaphore,
+    private Request<Void> delayedRelease(final PASemaphore semaphore,
                                          final long delay, final MailboxFactory mailboxFactory) {
         return new RequestBase<Void>(mailboxFactory.createMailbox()) {
             @Override
@@ -47,7 +47,7 @@ public class SemaphoreTest extends TestCase {
 
     public void testIII() throws Exception {
         final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
-        final Semaphore semaphore = new Semaphore(
+        final PASemaphore semaphore = new PASemaphore(
                 mailboxFactory.createMailbox(), 0);
         final long d = 100;
         final long t0 = System.currentTimeMillis();
@@ -58,7 +58,7 @@ public class SemaphoreTest extends TestCase {
         mailboxFactory.close();
     }
 
-    private Request<Boolean> acquireException(final Semaphore semaphore,
+    private Request<Boolean> acquireException(final PASemaphore semaphore,
                                               final Mailbox mailbox) {
         return new RequestBase<Boolean>(mailbox) {
             @Override
@@ -86,7 +86,7 @@ public class SemaphoreTest extends TestCase {
 
     public void testIV() throws Exception {
         final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
-        final Semaphore semaphore = new Semaphore(
+        final PASemaphore semaphore = new PASemaphore(
                 mailboxFactory.createMailbox(), 0);
         final long d = 100;
         final long t0 = System.currentTimeMillis();

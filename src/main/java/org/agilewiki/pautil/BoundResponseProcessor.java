@@ -9,6 +9,7 @@ import org.agilewiki.pactor.ResponseProcessor;
  * When a request is processed, the ResponseProcessor given must only be used by the
  * same thread that is processing the request. In contrast, the processResult method
  * of BoundResponseProcessor can be called from any thread.
+ *
  * @param <RESPONSE_TYPE>
  */
 public class BoundResponseProcessor<RESPONSE_TYPE> implements
@@ -25,9 +26,10 @@ public class BoundResponseProcessor<RESPONSE_TYPE> implements
 
     /**
      * Create a thread-safe wrapper for a ResponseProcessor.
-     * @param _targetMailbox    The mailbox on whose thread the wrapped ResponseProcessor
-     *                          can be used.
-     * @param _rp               The wrapped ResponseProcessor.
+     *
+     * @param _targetMailbox The mailbox on whose thread the wrapped ResponseProcessor
+     *                       can be used.
+     * @param _rp            The wrapped ResponseProcessor.
      */
     public BoundResponseProcessor(final Mailbox _targetMailbox,
                                   final ResponseProcessor<RESPONSE_TYPE> _rp) {
@@ -50,8 +52,8 @@ public class BoundResponseProcessor<RESPONSE_TYPE> implements
      * This method processes the response by passing the wrapped response and ResponseProcessor
      * via a buffered signal back to the appropriate mailbox.
      *
-     * @param source    The mailbox of the actor passing the signal.
-     * @param rsp       The response.
+     * @param source The mailbox of the actor passing the signal.
+     * @param rsp    The response.
      */
     public void processResponse(final Mailbox source, final RESPONSE_TYPE rsp)
             throws Exception {
@@ -63,7 +65,8 @@ public class BoundResponseProcessor<RESPONSE_TYPE> implements
 /**
  * The request used to pass the response and the wrapped ResponseProcessor back to the
  * original target mailbox.
- * @param <RESPONSE_TYPE>    The type of response.
+ *
+ * @param <RESPONSE_TYPE> The type of response.
  */
 class ContinuationRequest<RESPONSE_TYPE> extends RequestBase<Void> {
     /**
@@ -79,9 +82,10 @@ class ContinuationRequest<RESPONSE_TYPE> extends RequestBase<Void> {
     /**
      * Creates the request used to pass the response and wrapped ResponseProcessor
      * back to the original target mailbox.
-     * @param targetMailbox    The original target mailbox.
-     * @param _rp              The wrapped ResponseProcessor.
-     * @param _rsp             The response.
+     *
+     * @param targetMailbox The original target mailbox.
+     * @param _rp           The wrapped ResponseProcessor.
+     * @param _rsp          The response.
      */
     public ContinuationRequest(final Mailbox targetMailbox,
                                final ResponseProcessor<RESPONSE_TYPE> _rp, final RESPONSE_TYPE _rsp) {
@@ -94,7 +98,8 @@ class ContinuationRequest<RESPONSE_TYPE> extends RequestBase<Void> {
      * Called when the signal is received by the original target mailbox, the
      * processResponse method of the wrapped ResponseProcessor can finally be called
      * on the appropriate thread.
-     * @param _rp    The ResponseProcessor for the signal.
+     *
+     * @param _rp The ResponseProcessor for the signal.
      */
     @Override
     public void processRequest(final ResponseProcessor<Void> _rp)
