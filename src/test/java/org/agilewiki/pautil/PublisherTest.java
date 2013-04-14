@@ -10,7 +10,7 @@ public class PublisherTest extends TestCase {
     public void test() throws Exception {
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         try {
-            PublisherBase p = new PublisherBase();
+            Publisher p = new Publisher();
             p.initialize(mailboxFactory.createMailbox());
             Printer a = new Printer();
             a.initialize(mailboxFactory.createMailbox());
