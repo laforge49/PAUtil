@@ -52,6 +52,7 @@ public class AncestorBase extends ActorBase implements Ancestor {
 
     /**
      * Initialize the actor with a mailbox, but no dependency stack.
+     *
      * @param _mailbox The mailbox used by the actor for message passing.
      */
     final public void initialize(final Mailbox _mailbox) throws Exception {
@@ -60,8 +61,9 @@ public class AncestorBase extends ActorBase implements Ancestor {
 
     /**
      * Initialize the actor with both a mailbox and an immutable dependency stack.
+     *
      * @param _mailbox The mailbox used by the actor for message passing.
-     * @param _parent The top of the immutable dependency stack.
+     * @param _parent  The top of the immutable dependency stack.
      */
     public void initialize(final Mailbox _mailbox, final Ancestor _parent) throws Exception {
         super.initialize(_mailbox);

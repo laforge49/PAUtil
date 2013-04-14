@@ -1,13 +1,7 @@
 package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
-
-import org.agilewiki.pactor.ActorBase;
-import org.agilewiki.pactor.Mailbox;
-import org.agilewiki.pactor.MailboxFactory;
-import org.agilewiki.pactor.Request;
-import org.agilewiki.pactor.RequestBase;
-import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.*;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 public class BoundResponseProcessorTest extends TestCase {

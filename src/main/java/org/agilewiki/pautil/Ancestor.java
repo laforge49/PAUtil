@@ -8,6 +8,7 @@ import org.agilewiki.pactor.Actor;
 public interface Ancestor extends Actor {
     /**
      * Returns the parent actor in the dependency stack.
+     *
      * @return The parent actor, or null.
      */
     public Ancestor getParent();

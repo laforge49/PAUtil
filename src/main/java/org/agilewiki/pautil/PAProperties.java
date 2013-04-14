@@ -2,25 +2,41 @@ package org.agilewiki.pautil;
 
 import org.agilewiki.pactor.Properties;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
- * GetProperties first checks the component's own table of name/value pairs. If the property is not
- * found and its parent also has a Properties component, then the request is passed up to
- * the parent.
+ * A hierarchy of concurrent property sets.
  */
 public class PAProperties extends AncestorBase implements Properties {
-
+    /**
+     * Finds an ancestor that implements Properties.
+     *
+     * @param child The actor whose dependency stack is searched.
+     * @return An implementation of Properties, or null.
+     */
     public static Properties getAncestor(final Ancestor child) {
         return (Properties) getAncestor(child, Properties.class);
     }
 
+    /**
+     * Finds an implementation of Properties.
+     *
+     * @param child An implementation of Properties or an actor with a Properties actor in its dependencies stack.
+     * @return An implementation of Properties, or null.
+     */
     public static Properties getMatch(final Ancestor child) {
         return (Properties) getMatch(child, Properties.class);
     }
 
+    /**
+     * Returns the value of a property.
+     *
+     * @param child        An implementation of Properties or an actor with a Properties actor in its dependencies stack.
+     * @param propertyName The name of the property.
+     * @return The value or, when the property could not be found, null.
+     * @throws UnsupportedOperationException Thrown when a Properties actor could not be found.
+     */
     public static Object getProperty(final Ancestor child, final String propertyName)
             throws Exception {
         Properties properties = getMatch(child);
@@ -32,6 +48,14 @@ public class PAProperties extends AncestorBase implements Properties {
         return properties.getProperty(propertyName);
     }
 
+    /**
+     * Assign a value to a property.
+     *
+     * @param child         An implementation of Properties or an actor with a Properties actor in its dependencies stack.
+     * @param propertyName  The name of the property.
+     * @param propertyValue The value to be assigned to the property.
+     * @throws UnsupportedOperationException Thrown when a Properties actor could not be found.
+     */
     public static void putProperty(final Ancestor child, final String propertyName, final Object propertyValue)
             throws Exception {
         Properties properties = getMatch(child);
@@ -50,7 +74,7 @@ public class PAProperties extends AncestorBase implements Properties {
             new ConcurrentSkipListMap<String, Object>();
 
     @Override
-    public Object getProperty(final String propertyName) throws Exception {
+    public Object getProperty(final String propertyName) {
         if (properties.containsKey(propertyName))
             return properties.get(propertyName);
         Properties properties = getAncestor(this);
@@ -60,12 +84,15 @@ public class PAProperties extends AncestorBase implements Properties {
     }
 
     @Override
-    public void putProperty(final String propertyName, final Object propertyValue) throws Exception {
+    public void putProperty(final String propertyName, final Object propertyValue) {
         properties.put(propertyName, propertyValue);
     }
 
     @Override
-    public Iterator<Map.Entry<String, Object>> iterator() {
-        return properties.entrySet().iterator();
+    public void copyTo(final Map<String, Object> _map) {
+        Properties p = getAncestor(this);
+        if (p != null)
+            p.copyTo(_map);
+        _map.putAll(properties);
     }
 }

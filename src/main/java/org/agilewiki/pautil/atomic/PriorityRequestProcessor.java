@@ -5,6 +5,6 @@ import java.util.Queue;
 
 public class PriorityRequestProcessor extends AtomicRequestProcessorBase {
     protected Queue<AtomicEntry> createQueue() {
-        return  new PriorityQueue<AtomicEntry>();
+        return new PriorityQueue<AtomicEntry>();
     }
 }

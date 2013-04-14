@@ -1,13 +1,7 @@
 package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
-
-import org.agilewiki.pactor.ExceptionHandler;
-import org.agilewiki.pactor.Mailbox;
-import org.agilewiki.pactor.MailboxFactory;
-import org.agilewiki.pactor.Request;
-import org.agilewiki.pactor.RequestBase;
-import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.*;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 /**
@@ -32,7 +26,7 @@ public class SemaphoreTest extends TestCase {
     }
 
     private Request<Void> delayedRelease(final Semaphore semaphore,
-            final long delay, final MailboxFactory mailboxFactory) {
+                                         final long delay, final MailboxFactory mailboxFactory) {
         return new RequestBase<Void>(mailboxFactory.createMailbox()) {
             @Override
             public void processRequest(
@@ -65,7 +59,7 @@ public class SemaphoreTest extends TestCase {
     }
 
     private Request<Boolean> acquireException(final Semaphore semaphore,
-            final Mailbox mailbox) {
+                                              final Mailbox mailbox) {
         return new RequestBase<Boolean>(mailbox) {
             @Override
             public void processRequest(

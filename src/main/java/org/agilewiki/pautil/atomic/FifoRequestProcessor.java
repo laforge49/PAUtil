@@ -5,6 +5,6 @@ import java.util.Queue;
 
 public class FifoRequestProcessor extends AtomicRequestProcessorBase {
     protected Queue<AtomicEntry> createQueue() {
-        return  new ArrayDeque<AtomicEntry>();
+        return new ArrayDeque<AtomicEntry>();
     }
 }

@@ -23,7 +23,7 @@ public abstract class AtomicRequestProcessorBase
 
 
     public Request<?> atomicReq(final Request _request) {
-        return new RequestBase<Object> (mailbox) {
+        return new RequestBase<Object>(mailbox) {
             @Override
             public void processRequest(final ResponseProcessor<Object> _rp) throws Exception {
                 entries.offer(new AtomicEntry(_request, _rp));
@@ -56,7 +56,8 @@ public abstract class AtomicRequestProcessorBase
                 try {
                     busy = false;
                     _rp.processResponse(ex);
-                } catch (Exception ex2) {}
+                } catch (Exception ex2) {
+                }
             }
         }
     }

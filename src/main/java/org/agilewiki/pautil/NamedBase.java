@@ -13,6 +13,7 @@ public class NamedBase extends ActorBase implements Named {
 
     /**
      * Returns the immutable actor name.
+     *
      * @return The actor name, or null.
      */
     @Override

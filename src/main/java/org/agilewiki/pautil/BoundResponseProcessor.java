@@ -32,7 +32,7 @@ class ContinuationRequest<RESPONSE_TYPE> extends RequestBase<Void> {
     private final RESPONSE_TYPE rsp;
 
     public ContinuationRequest(final Mailbox targetMailbox,
-            final ResponseProcessor<RESPONSE_TYPE> _rp, final RESPONSE_TYPE _rsp) {
+                               final ResponseProcessor<RESPONSE_TYPE> _rp, final RESPONSE_TYPE _rsp) {
         super(targetMailbox);
         rp = _rp;
         rsp = _rsp;
