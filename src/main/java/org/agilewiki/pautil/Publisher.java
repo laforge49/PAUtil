@@ -12,7 +12,9 @@ import java.util.Set;
  */
 public class Publisher<TARGET_ACTOR_TYPE extends Actor> extends
         AncestorBase {
-    /** The subscribers */
+    /**
+     * The subscribers
+     */
     private final Set<TARGET_ACTOR_TYPE> subscribers = new HashSet<TARGET_ACTOR_TYPE>();
 
     /**

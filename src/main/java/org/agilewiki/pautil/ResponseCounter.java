@@ -33,9 +33,10 @@ public class ResponseCounter<RESPONSE_TYPE> implements
 
     /**
      * Create a ResponseCounter.
-     * @param _count      The number of outstanding requests.
-     * @param response    The response to be given when all requests have completed.
-     * @param _rp         The ResponseProcessor to be used when all outstanding requests have completed.
+     *
+     * @param _count   The number of outstanding requests.
+     * @param response The response to be given when all requests have completed.
+     * @param _rp      The ResponseProcessor to be used when all outstanding requests have completed.
      */
     public ResponseCounter(final int _count,
                            final RESPONSE_TYPE response,
@@ -69,7 +70,8 @@ public class ResponseCounter<RESPONSE_TYPE> implements
     /**
      * The setResult method can be used to change the result to be given when all outstanding
      * requests have completed.
-     * @param _result    The new result to be given.
+     *
+     * @param _result The new result to be given.
      */
     public void setResult(final RESPONSE_TYPE _result) {
         this.result = _result;
@@ -77,6 +79,7 @@ public class ResponseCounter<RESPONSE_TYPE> implements
 
     /**
      * Returns the number of outstanding requests remaining.
+     *
      * @return The number of outstanding requests remaining.
      */
     public int getCount() {
@@ -85,7 +88,8 @@ public class ResponseCounter<RESPONSE_TYPE> implements
 
     /**
      * This method is called as each request completes.
-     * @param response    The response given, which is ignored.
+     *
+     * @param response The response given, which is ignored.
      */
     @Override
     public void processResponse(final RESPONSE_TYPE response) throws Exception {
