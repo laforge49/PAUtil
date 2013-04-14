@@ -7,11 +7,13 @@ import org.agilewiki.pautil.Delay;
 import org.agilewiki.pautil.ResponseCounter;
 
 public class AtomicTest extends TestCase {
+    int count = 0;
+
     public void test1() throws Exception {
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         try {
-            int count = startReq1(mailboxFactory.createMailbox()).call();
-            assertEquals(5, count);
+            int _count = startReq1(mailboxFactory.createMailbox()).call();
+            assertEquals(5, _count);
         } finally {
             mailboxFactory.close();
         }
@@ -21,12 +23,11 @@ public class AtomicTest extends TestCase {
         return new RequestBase<Integer>(_mailbox) {
             @Override
             public void processRequest(final ResponseProcessor<Integer> _rp) throws Exception {
-                final AP ap = new AP();
-                ap.initialize(getMailbox().getMailboxFactory().createMailbox(true, ap));
+                final FifoRequestProcessor ap = FifoRequestProcessor.create(getMailbox().getMailboxFactory());
                 ResponseProcessor rc = new ResponseCounter(5, null, new ResponseProcessor() {
                     @Override
                     public void processResponse(Object response) throws Exception {
-                        _rp.processResponse(ap.count);
+                        _rp.processResponse(count);
                     }
                 });
                 ap.atomicReq(aReq(ap, 1)).send(_mailbox, rc);
@@ -38,7 +39,7 @@ public class AtomicTest extends TestCase {
         };
     }
 
-    Request<Void> aReq(final AP ap, final int msg) {
+    Request<Void> aReq(final FifoRequestProcessor ap, final int msg) {
         final Mailbox mailbox = ap.getMailbox();
         return new RequestBase<Void>(mailbox) {
             @Override
@@ -47,9 +48,9 @@ public class AtomicTest extends TestCase {
                 delay.sleepReq(100 - (msg * 20)).send(mailbox, new ResponseProcessor<Void>() {
                     @Override
                     public void processResponse(Void response) throws Exception {
-                        if (ap.count != msg - 1)
+                        if (count != msg - 1)
                             throw new IllegalStateException();
-                        ap.count = msg;
+                        count = msg;
                         _rp.processResponse(null);
                     }
                 });
@@ -78,8 +79,4 @@ public class AtomicTest extends TestCase {
             }
         };
     }
-}
-
-class AP extends FifoRequestProcessor {
-    int count = 0;
 }

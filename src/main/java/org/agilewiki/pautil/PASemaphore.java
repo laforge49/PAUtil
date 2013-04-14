@@ -40,8 +40,8 @@ public class PASemaphore {
     /**
      * Create a semaphore manager.
      *
-     * @param mbox The mailbox used to handle requests.
-     * @param permitCount    The number of semaphores initially available.
+     * @param mbox        The mailbox used to handle requests.
+     * @param permitCount The number of semaphores initially available.
      */
     public PASemaphore(final Mailbox mbox, final int permitCount) {
         this.mailbox = mbox;
