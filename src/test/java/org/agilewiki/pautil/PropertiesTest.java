@@ -7,17 +7,15 @@ import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 public class PropertiesTest extends TestCase {
     public void test() throws Exception {
-        final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
+        final MailboxFactory mailboxFactory1 = new DefaultMailboxFactoryImpl();
+        final MailboxFactory mailboxFactory2 = new DefaultMailboxFactoryImpl();
         try {
-            PAProperties p1 = new PAProperties();
-            p1.initialize();
-            PAProperties p2 = new PAProperties();
-            p2.initialize(p1);
-            mailboxFactory.setProperties(p2);
+            PAProperties p1 = new PAProperties(mailboxFactory1, null);
+            PAProperties p2 = new PAProperties(mailboxFactory2, p1);
             p1.putProperty("a", "foo");
             p2.putProperty("b", "bar");
             ActorBase z = new ActorBase();
-            z.initialize(mailboxFactory.createMailbox());
+            z.initialize(mailboxFactory2.createMailbox());
             String a = (String) PAProperties.getProperty(z, "a");
             assertEquals("foo", a);
             String b = (String) PAProperties.getProperty(z, "b");
@@ -25,7 +23,8 @@ public class PropertiesTest extends TestCase {
             String c = (String) PAProperties.getProperty(z, "c");
             assertNull(c);
         } finally {
-            mailboxFactory.close();
+            mailboxFactory2.close();
+            mailboxFactory1.close();
         }
     }
 }

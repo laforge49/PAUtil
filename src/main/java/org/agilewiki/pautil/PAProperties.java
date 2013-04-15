@@ -1,6 +1,7 @@
 package org.agilewiki.pautil;
 
 import org.agilewiki.pactor.Actor;
+import org.agilewiki.pactor.MailboxFactory;
 import org.agilewiki.pactor.Properties;
 
 import java.util.Map;
@@ -67,6 +68,18 @@ public class PAProperties extends AncestorBase implements Properties {
      */
     private ConcurrentSkipListMap<String, Object> properties =
             new ConcurrentSkipListMap<String, Object>();
+
+    public PAProperties(final MailboxFactory _mailboxFactory)
+            throws Exception {
+        this(_mailboxFactory, null);
+    }
+
+    public PAProperties(final MailboxFactory _mailboxFactory, final Ancestor _parent)
+            throws Exception {
+        initialize(_parent);
+        _mailboxFactory.setProperties(this);
+        putProperty("mailboxFactory", _mailboxFactory);
+    }
 
     @Override
     public Object getProperty(final String propertyName) {
