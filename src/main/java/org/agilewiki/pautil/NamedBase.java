@@ -24,7 +24,7 @@ public class NamedBase implements Named {
      *
      * @param _name The actor name.
      */
-    public void setName(final String _name) throws Exception {
+    public void setName(final String _name) {
         if (name != null)
             throw new UnsupportedOperationException("Already named: " + name);
         name = _name;
