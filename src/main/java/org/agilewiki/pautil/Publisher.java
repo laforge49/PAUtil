@@ -11,7 +11,7 @@ import java.util.Set;
  * @param <TARGET_ACTOR_TYPE> The type of subscriber.
  */
 public class Publisher<TARGET_ACTOR_TYPE extends Actor> extends
-        AncestorBase {
+        ActorBase {
     /**
      * The subscribers
      */

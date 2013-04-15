@@ -5,7 +5,7 @@ import org.agilewiki.pactor.Actor;
 /**
  * The Ancestor interface supports injection of an immutable dependency stack.
  */
-public interface Ancestor extends Actor {
+public interface Ancestor {
     /**
      * Returns the parent actor in the dependency stack.
      *

@@ -1,5 +1,6 @@
 package org.agilewiki.pautil;
 
+import org.agilewiki.pactor.Actor;
 import org.agilewiki.pactor.Properties;
 
 import java.util.Map;
@@ -32,38 +33,32 @@ public class PAProperties extends AncestorBase implements Properties {
     /**
      * Returns the value of a property.
      *
-     * @param child        An implementation of Properties or an actor with a Properties actor in its dependencies stack.
+     * @param actor        An actor.
      * @param propertyName The name of the property.
      * @return The value or, when the property could not be found, null.
      * @throws UnsupportedOperationException Thrown when a Properties actor could not be found.
      */
-    public static Object getProperty(final Ancestor child, final String propertyName)
+    public static Object getProperty(final Actor actor, final String propertyName)
             throws Exception {
-        Properties properties = getMatch(child);
-        if (properties == null) {
-            properties = child.getMailbox().getMailboxFactory().getProperties();
-            if (properties == null)
-                throw new UnsupportedOperationException("no Properties ancestor");
-        }
+        Properties properties = actor.getMailbox().getMailboxFactory().getProperties();
+        if (properties == null)
+            throw new UnsupportedOperationException("no Properties ancestor");
         return properties.getProperty(propertyName);
     }
 
     /**
      * Assign a value to a property.
      *
-     * @param child         An implementation of Properties or an actor with a Properties actor in its dependencies stack.
+     * @param actor         An implementation of Properties or an actor with a Properties actor in its dependencies stack.
      * @param propertyName  The name of the property.
      * @param propertyValue The value to be assigned to the property.
      * @throws UnsupportedOperationException Thrown when a Properties actor could not be found.
      */
-    public static void putProperty(final Ancestor child, final String propertyName, final Object propertyValue)
+    public static void putProperty(final Actor actor, final String propertyName, final Object propertyValue)
             throws Exception {
-        Properties properties = getMatch(child);
-        if (properties == null) {
-            properties = child.getMailbox().getMailboxFactory().getProperties();
-            if (properties == null)
-                throw new UnsupportedOperationException("no Properties ancestor");
-        }
+        Properties properties = actor.getMailbox().getMailboxFactory().getProperties();
+        if (properties == null)
+            throw new UnsupportedOperationException("no Properties ancestor");
         properties.putProperty(propertyName, propertyValue);
     }
 

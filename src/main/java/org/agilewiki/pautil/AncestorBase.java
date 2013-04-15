@@ -6,7 +6,13 @@ import org.agilewiki.pactor.Mailbox;
 /**
  * Implements immutable dependency stack injection.
  */
-public class AncestorBase extends ActorBase implements Ancestor {
+public class AncestorBase implements Ancestor {
+
+    /**
+     * True when initialized, this flag prevents duplicate initialization.
+     */
+    private boolean initialized;
+
     /**
      * Returns an ancestor, excluding the child, which is an instance of the target class.
      *
@@ -42,31 +48,30 @@ public class AncestorBase extends ActorBase implements Ancestor {
     private Ancestor parent;
 
     /**
-     * Initialize the actor with an ancestor stack, but no mailbox.
+     * Returns true when the actor has been initialized.
+     *
+     * @return True when the actor has been initialized.
+     */
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    /**
+     * Initialize with no ancestor stack.
+     */
+    final public void initialize() throws Exception {
+        initialize(null);
+    }
+
+    /**
+     * Initialize with an ancestor stack.
      *
      * @param _parent The top of the immutable dependency stack.
      */
     final public void initialize(final Ancestor _parent) throws Exception {
-        initialize(null, _parent);
-    }
-
-    /**
-     * Initialize the actor with a mailbox, but no dependency stack.
-     *
-     * @param _mailbox The mailbox used by the actor for message passing.
-     */
-    final public void initialize(final Mailbox _mailbox) throws Exception {
-        initialize(_mailbox, null);
-    }
-
-    /**
-     * Initialize the actor with both a mailbox and an immutable dependency stack.
-     *
-     * @param _mailbox The mailbox used by the actor for message passing.
-     * @param _parent  The top of the immutable dependency stack.
-     */
-    public void initialize(final Mailbox _mailbox, final Ancestor _parent) throws Exception {
-        super.initialize(_mailbox);
+        if (initialized)
+            throw new IllegalStateException("Already initialized");
+        initialized = true;
         parent = _parent;
     }
 
