@@ -12,6 +12,7 @@ import java.util.Queue;
 public class PriorityRequestProcessor extends AtomicRequestProcessor {
     /**
      * Creates a PriorityRequestProcessor.
+     *
      * @param _mailboxFactory The mailbox factory.
      * @return A new PriorityRequestProcessor.
      */

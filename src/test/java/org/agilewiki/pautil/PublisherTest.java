@@ -1,6 +1,7 @@
 package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
+import org.agilewiki.pactor.ActorBase;
 import org.agilewiki.pactor.MailboxFactory;
 import org.agilewiki.pactor.ResponseProcessor;
 import org.agilewiki.pactor.UnboundRequestBase;
@@ -14,15 +15,15 @@ public class PublisherTest extends TestCase {
             p.initialize(mailboxFactory.createMailbox());
             Printer a = new Printer();
             a.initialize(mailboxFactory.createMailbox());
-            a.setActorName("a");
+            a.setName("a");
             p.subscribeReq(a).call();
             Printer b = new Printer();
             b.initialize(mailboxFactory.createMailbox());
-            b.setActorName("b");
+            b.setName("b");
             p.subscribeReq(b).call();
             Printer c = new Printer();
             c.initialize(mailboxFactory.createMailbox());
-            c.setActorName("c");
+            c.setName("c");
             p.subscribeReq(c).call();
             p.publishReq(new Print("42")).call();
             p.publishReq(new Print("24")).call();
@@ -33,9 +34,35 @@ public class PublisherTest extends TestCase {
     }
 }
 
-class Printer extends NamedBase {
+class Printer extends ActorBase implements Named {
+    /**
+     * The name, or null.
+     */
+    private String name;
+
+    /**
+     * Returns the immutable name.
+     *
+     * @return The name, or null.
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Assigns a name, unless already assigned.
+     *
+     * @param _name The actor name.
+     */
+    public void setName(final String _name) throws Exception {
+        if (name != null)
+            throw new UnsupportedOperationException("Already named: " + name);
+        name = _name;
+    }
+
     public void print(String s) throws Exception {
-        System.out.println(getActorName() + " received " + s);
+        System.out.println(getName() + " received " + s);
     }
 }
 

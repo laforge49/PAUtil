@@ -1,7 +1,5 @@
 package org.agilewiki.pautil;
 
-import org.agilewiki.pactor.Actor;
-
 /**
  * The Ancestor interface supports injection of an immutable dependency stack.
  */

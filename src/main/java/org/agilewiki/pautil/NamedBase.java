@@ -1,34 +1,32 @@
 package org.agilewiki.pautil;
 
-import org.agilewiki.pactor.ActorBase;
-
 /**
  * Implements Named with an effectively final value.
  */
-public class NamedBase extends ActorBase implements Named {
+public class NamedBase implements Named {
     /**
-     * The actor name, or null.
+     * The name, or null.
      */
-    private String actorName;
+    private String name;
 
     /**
-     * Returns the immutable actor name.
+     * Returns the immutable name.
      *
-     * @return The actor name, or null.
+     * @return The name, or null.
      */
     @Override
-    public String getActorName() {
-        return actorName;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Assigns an actor name, unless already assigned.
+     * Assigns a name, unless already assigned.
      *
-     * @param _actorName The actor name.
+     * @param _name The actor name.
      */
-    public void setActorName(final String _actorName) throws Exception {
-        if (actorName != null)
-            throw new UnsupportedOperationException("Already named: " + actorName);
-        actorName = _actorName;
+    public void setName(final String _name) throws Exception {
+        if (name != null)
+            throw new UnsupportedOperationException("Already named: " + name);
+        name = _name;
     }
 }

@@ -12,6 +12,7 @@ import java.util.Queue;
 public class FifoRequestProcessor extends AtomicRequestProcessor {
     /**
      * Creates a FifoRequestProcessor.
+     *
      * @param _mailboxFactory The mailbox factory.
      * @return A new FifoRequestProcessor.
      */
