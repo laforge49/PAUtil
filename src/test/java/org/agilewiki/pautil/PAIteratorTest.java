@@ -1,7 +1,14 @@
 package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
-import org.agilewiki.pactor.*;
+
+import org.agilewiki.pactor.ActorBase;
+import org.agilewiki.pactor.Mailbox;
+import org.agilewiki.pactor.MailboxFactory;
+import org.agilewiki.pactor.Request;
+import org.agilewiki.pactor.RequestBase;
+import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.UnboundRequestBase;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 public class PAIteratorTest extends TestCase {
@@ -17,7 +24,6 @@ public class PAIteratorTest extends TestCase {
 //                Count: 100,000,000
 //                Test time in milliseconds: 4080
 //                Messages per second: 24,509,803
-
 
         System.out.println("shared mailbox test");
         MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
@@ -53,7 +59,8 @@ public class PAIteratorTest extends TestCase {
     Request<Void> runReq() {
         return new RequestBase<Void>(mailbox) {
             @Override
-            public void processRequest(final ResponseProcessor<Void> _rp) throws Exception {
+            public void processRequest(final ResponseProcessor<Void> _rp)
+                    throws Exception {
                 final CounterActor counterActor = new CounterActor();
                 counterActor.initialize(counterMailbox);
                 final UnboundAddReq uar = new UnboundAddReq(1);
@@ -62,8 +69,10 @@ public class PAIteratorTest extends TestCase {
                     long i = 0;
 
                     @Override
-                    protected void process(ResponseProcessor rp1) throws Exception {
-                        if (i == runs) rp1.processResponse(this);
+                    protected void process(ResponseProcessor rp1)
+                            throws Exception {
+                        if (i == runs)
+                            rp1.processResponse(this);
                         else {
                             i += 1;
                             uar.send(mailbox, counterActor, rp1);
@@ -73,20 +82,29 @@ public class PAIteratorTest extends TestCase {
                 final long start = System.currentTimeMillis();
                 pait.iterate(new ResponseProcessor() {
                     @Override
-                    public void processResponse(Object response) throws Exception {
-                        urr.send(mailbox, counterActor, new ResponseProcessor<Long>() {
-                            @Override
-                            public void processResponse(final Long count) throws Exception {
-                                long finish = System.currentTimeMillis();
-                                long elapsedTime = finish - start;
-                                System.out.println("Number of runs: " + runs);
-                                System.out.println("Count: " + count);
-                                System.out.println("Test time in milliseconds: " + elapsedTime);
-                                if (elapsedTime > 0)
-                                    System.out.println("Messages per second: " + (runs * 1000 / elapsedTime));
-                                _rp.processResponse(null);
-                            }
-                        });
+                    public void processResponse(Object response)
+                            throws Exception {
+                        urr.send(mailbox, counterActor,
+                                new ResponseProcessor<Long>() {
+                                    @Override
+                                    public void processResponse(final Long count)
+                                            throws Exception {
+                                        long finish = System
+                                                .currentTimeMillis();
+                                        long elapsedTime = finish - start;
+                                        System.out.println("Number of runs: "
+                                                + runs);
+                                        System.out.println("Count: " + count);
+                                        System.out
+                                                .println("Test time in milliseconds: "
+                                                        + elapsedTime);
+                                        if (elapsedTime > 0)
+                                            System.out
+                                                    .println("Messages per second: "
+                                                            + (runs * 1000 / elapsedTime));
+                                        _rp.processResponse(null);
+                                    }
+                                });
                     }
                 });
             }
@@ -102,7 +120,8 @@ class UnboundAddReq extends UnboundRequestBase<Void, CounterActor> {
     }
 
     @Override
-    public void processRequest(final CounterActor _targetActor, final ResponseProcessor<Void> _rp) throws Exception {
+    public void processRequest(final CounterActor _targetActor,
+            final ResponseProcessor<Void> _rp) throws Exception {
         _targetActor.add(inc);
         _rp.processResponse(null);
     }
@@ -111,8 +130,8 @@ class UnboundAddReq extends UnboundRequestBase<Void, CounterActor> {
 class UnboundResetReq extends UnboundRequestBase<Long, CounterActor> {
 
     @Override
-    public void processRequest(final CounterActor _targetActor, final ResponseProcessor<Long> _rp)
-            throws Exception {
+    public void processRequest(final CounterActor _targetActor,
+            final ResponseProcessor<Long> _rp) throws Exception {
         _rp.processResponse(_targetActor.reset());
     }
 }
@@ -124,8 +143,7 @@ class CounterActor extends ActorBase {
         count += inc;
     }
 
-    public long reset()
-            throws Exception {
+    public long reset() throws Exception {
         long rv = count;
         count = 0;
         return rv;

@@ -17,7 +17,8 @@ public class AncestorBase implements Ancestor {
      * @param targetClass The class used to select the ancestor.
      * @return The ancestor that is an instance of the target class, or null.
      */
-    public static Ancestor getAncestor(final Ancestor child, final Class targetClass) {
+    public static Ancestor getAncestor(final Ancestor child,
+            final Class targetClass) {
         if (child == null)
             return null;
         return getMatch(child.getParent(), targetClass);

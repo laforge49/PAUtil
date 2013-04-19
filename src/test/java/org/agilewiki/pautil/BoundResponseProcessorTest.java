@@ -1,7 +1,13 @@
 package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
-import org.agilewiki.pactor.*;
+
+import org.agilewiki.pactor.ActorBase;
+import org.agilewiki.pactor.Mailbox;
+import org.agilewiki.pactor.MailboxFactory;
+import org.agilewiki.pactor.Request;
+import org.agilewiki.pactor.RequestBase;
+import org.agilewiki.pactor.ResponseProcessor;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 public class BoundResponseProcessorTest extends TestCase {
@@ -34,7 +40,8 @@ class Driver extends ActorBase {
                     throws Exception {
                 final BoundResponseProcessor<String> boundResponseProcessor = new BoundResponseProcessor<String>(
                         _mailbox, rp);
-                final Application application = new Application(boundResponseProcessor);
+                final Application application = new Application(
+                        boundResponseProcessor);
                 application.start();
             }
         };
@@ -44,7 +51,8 @@ class Driver extends ActorBase {
 class Application extends Thread {
     private final BoundResponseProcessor<String> boundResponseProcessor;
 
-    public Application(final BoundResponseProcessor<String> _boundResponseProcessor) {
+    public Application(
+            final BoundResponseProcessor<String> _boundResponseProcessor) {
         boundResponseProcessor = _boundResponseProcessor;
     }
 

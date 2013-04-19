@@ -1,15 +1,20 @@
 package org.agilewiki.pautil.atomic;
 
-import org.agilewiki.pactor.*;
-
 import java.util.Queue;
+
+import org.agilewiki.pactor.ActorBase;
+import org.agilewiki.pactor.ExceptionHandler;
+import org.agilewiki.pactor.Mailbox;
+import org.agilewiki.pactor.Request;
+import org.agilewiki.pactor.RequestBase;
+import org.agilewiki.pactor.ResponseProcessor;
 
 /**
  * An actor which processes a requests one at a time, waiting for each
  * request to complete before starting the next.
  */
-public abstract class AtomicRequestProcessor extends ActorBase
-        implements Runnable {
+public abstract class AtomicRequestProcessor extends ActorBase implements
+        Runnable {
     /**
      * A queue of pending requests.
      */
@@ -44,7 +49,8 @@ public abstract class AtomicRequestProcessor extends ActorBase
     public Request<?> atomicReq(final Request _request) {
         return new RequestBase<Object>(getMailbox()) {
             @Override
-            public void processRequest(final ResponseProcessor<Object> _rp) throws Exception {
+            public void processRequest(final ResponseProcessor<Object> _rp)
+                    throws Exception {
                 entries.offer(new AtomicEntry(_request, _rp));
             }
         };
@@ -53,6 +59,7 @@ public abstract class AtomicRequestProcessor extends ActorBase
     /**
      * Called by the mailbox when there are no messages to be processed.
      */
+    @Override
     public void run() {
         if (!busy && !entries.isEmpty()) {
             final AtomicEntry entry = entries.remove();
@@ -66,7 +73,8 @@ public abstract class AtomicRequestProcessor extends ActorBase
             };
             getMailbox().setExceptionHandler(new ExceptionHandler() {
                 @Override
-                public void processException(Throwable throwable) throws Exception {
+                public void processException(Throwable throwable)
+                        throws Exception {
                     busy = false;
                     _rp.processResponse(throwable);
                 }
@@ -105,7 +113,8 @@ class AtomicEntry {
      * @param _request A request to be processed to completion before the next such request is processed.
      * @param _rp      The ResponseProcessor that gets the response from the request, or the exception if one occurs.
      */
-    public AtomicEntry(final Request _request, final ResponseProcessor<Object> _rp) {
+    public AtomicEntry(final Request _request,
+            final ResponseProcessor<Object> _rp) {
         request = _request;
         rp = _rp;
     }

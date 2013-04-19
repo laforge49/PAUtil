@@ -1,7 +1,13 @@
 package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
-import org.agilewiki.pactor.*;
+
+import org.agilewiki.pactor.ExceptionHandler;
+import org.agilewiki.pactor.Mailbox;
+import org.agilewiki.pactor.MailboxFactory;
+import org.agilewiki.pactor.Request;
+import org.agilewiki.pactor.RequestBase;
+import org.agilewiki.pactor.ResponseProcessor;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 /**
@@ -26,7 +32,7 @@ public class SemaphoreTest extends TestCase {
     }
 
     private Request<Void> delayedRelease(final PASemaphore semaphore,
-                                         final long delay, final MailboxFactory mailboxFactory) {
+            final long delay, final MailboxFactory mailboxFactory) {
         return new RequestBase<Void>(mailboxFactory.createMailbox()) {
             @Override
             public void processRequest(
@@ -59,7 +65,7 @@ public class SemaphoreTest extends TestCase {
     }
 
     private Request<Boolean> acquireException(final PASemaphore semaphore,
-                                              final Mailbox mailbox) {
+            final Mailbox mailbox) {
         return new RequestBase<Boolean>(mailbox) {
             @Override
             public void processRequest(
@@ -73,13 +79,15 @@ public class SemaphoreTest extends TestCase {
                         responseProcessor.processResponse(true);
                     }
                 });
-                semaphore.acquireReq().send(mailbox, new ResponseProcessor<Void>() {
-                    @Override
-                    public void processResponse(final Void response)
-                            throws Exception {
-                        throw new SecurityException("thrown after acquire");
-                    }
-                });
+                semaphore.acquireReq().send(mailbox,
+                        new ResponseProcessor<Void>() {
+                            @Override
+                            public void processResponse(final Void response)
+                                    throws Exception {
+                                throw new SecurityException(
+                                        "thrown after acquire");
+                            }
+                        });
             }
         };
     }

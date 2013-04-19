@@ -1,17 +1,22 @@
 package org.agilewiki.pautil;
 
-import org.agilewiki.pactor.*;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import org.agilewiki.pactor.Actor;
+import org.agilewiki.pactor.ActorBase;
+import org.agilewiki.pactor.ExceptionHandler;
+import org.agilewiki.pactor.Request;
+import org.agilewiki.pactor.RequestBase;
+import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.UnboundRequest;
 
 /**
  * Implements Publish and Subscribe.
  *
  * @param <TARGET_ACTOR_TYPE> The type of subscriber.
  */
-public class Publisher<TARGET_ACTOR_TYPE extends Actor> extends
-        ActorBase {
+public class Publisher<TARGET_ACTOR_TYPE extends Actor> extends ActorBase {
     /**
      * The subscribers
      */

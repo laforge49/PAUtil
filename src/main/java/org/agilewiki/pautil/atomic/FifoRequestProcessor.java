@@ -1,9 +1,9 @@
 package org.agilewiki.pautil.atomic;
 
-import org.agilewiki.pactor.MailboxFactory;
-
 import java.util.ArrayDeque;
 import java.util.Queue;
+
+import org.agilewiki.pactor.MailboxFactory;
 
 /**
  * Create an atomic request processor which processes requests successively and in
@@ -16,8 +16,8 @@ public class FifoRequestProcessor extends AtomicRequestProcessor {
      * @param _mailboxFactory The mailbox factory.
      * @return A new FifoRequestProcessor.
      */
-    public static FifoRequestProcessor create(final MailboxFactory _mailboxFactory)
-            throws Exception {
+    public static FifoRequestProcessor create(
+            final MailboxFactory _mailboxFactory) throws Exception {
         FifoRequestProcessor arp = new FifoRequestProcessor();
         arp.initialize(_mailboxFactory.createMailbox(false, arp));
         return arp;

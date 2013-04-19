@@ -1,12 +1,12 @@
 package org.agilewiki.pautil;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 import org.agilewiki.pactor.Mailbox;
 import org.agilewiki.pactor.Request;
 import org.agilewiki.pactor.RequestBase;
 import org.agilewiki.pactor.ResponseProcessor;
-
-import java.util.ArrayDeque;
-import java.util.Queue;
 
 /**
  * Blocks request processing, not threads.

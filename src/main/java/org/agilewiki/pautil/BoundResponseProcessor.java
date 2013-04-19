@@ -32,7 +32,7 @@ public class BoundResponseProcessor<RESPONSE_TYPE> implements
      * @param _rp            The wrapped ResponseProcessor.
      */
     public BoundResponseProcessor(final Mailbox _targetMailbox,
-                                  final ResponseProcessor<RESPONSE_TYPE> _rp) {
+            final ResponseProcessor<RESPONSE_TYPE> _rp) {
         targetMailbox = _targetMailbox;
         rp = _rp;
     }
@@ -88,7 +88,7 @@ class ContinuationRequest<RESPONSE_TYPE> extends RequestBase<Void> {
      * @param _rsp          The response.
      */
     public ContinuationRequest(final Mailbox targetMailbox,
-                               final ResponseProcessor<RESPONSE_TYPE> _rp, final RESPONSE_TYPE _rsp) {
+            final ResponseProcessor<RESPONSE_TYPE> _rp, final RESPONSE_TYPE _rsp) {
         super(targetMailbox);
         rp = _rp;
         rsp = _rsp;

@@ -1,11 +1,11 @@
 package org.agilewiki.pautil;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
+
 import org.agilewiki.pactor.Actor;
 import org.agilewiki.pactor.MailboxFactory;
 import org.agilewiki.pactor.Properties;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * A hierarchy of concurrent property sets.
@@ -39,9 +39,10 @@ public class PAProperties extends AncestorBase implements Properties {
      * @return The value or, when the property could not be found, null.
      * @throws UnsupportedOperationException Thrown when a Properties actor could not be found.
      */
-    public static Object getProperty(final Actor actor, final String propertyName)
-            throws Exception {
-        Properties properties = actor.getMailbox().getMailboxFactory().getProperties();
+    public static Object getProperty(final Actor actor,
+            final String propertyName) throws Exception {
+        Properties properties = actor.getMailbox().getMailboxFactory()
+                .getProperties();
         if (properties == null)
             throw new UnsupportedOperationException("no Properties ancestor");
         return properties.getProperty(propertyName);
@@ -55,9 +56,11 @@ public class PAProperties extends AncestorBase implements Properties {
      * @param propertyValue The value to be assigned to the property.
      * @throws UnsupportedOperationException Thrown when a Properties actor could not be found.
      */
-    public static void putProperty(final Actor actor, final String propertyName, final Object propertyValue)
+    public static void putProperty(final Actor actor,
+            final String propertyName, final Object propertyValue)
             throws Exception {
-        Properties properties = actor.getMailbox().getMailboxFactory().getProperties();
+        Properties properties = actor.getMailbox().getMailboxFactory()
+                .getProperties();
         if (properties == null)
             throw new UnsupportedOperationException("no Properties ancestor");
         properties.putProperty(propertyName, propertyValue);
@@ -66,16 +69,14 @@ public class PAProperties extends AncestorBase implements Properties {
     /**
      * Table of registered actors.
      */
-    private ConcurrentSkipListMap<String, Object> properties =
-            new ConcurrentSkipListMap<String, Object>();
+    private ConcurrentSkipListMap<String, Object> properties = new ConcurrentSkipListMap<String, Object>();
 
-    public PAProperties(final MailboxFactory _mailboxFactory)
-            throws Exception {
+    public PAProperties(final MailboxFactory _mailboxFactory) throws Exception {
         this(_mailboxFactory, null);
     }
 
-    public PAProperties(final MailboxFactory _mailboxFactory, final Ancestor _parent)
-            throws Exception {
+    public PAProperties(final MailboxFactory _mailboxFactory,
+            final Ancestor _parent) throws Exception {
         initialize(_parent);
         _mailboxFactory.setProperties(this);
         putProperty("mailboxFactory", _mailboxFactory);
@@ -92,7 +93,8 @@ public class PAProperties extends AncestorBase implements Properties {
     }
 
     @Override
-    public void putProperty(final String propertyName, final Object propertyValue) {
+    public void putProperty(final String propertyName,
+            final Object propertyValue) {
         properties.put(propertyName, propertyValue);
     }
 
