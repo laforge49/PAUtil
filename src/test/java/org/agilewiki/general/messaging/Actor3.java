@@ -1,23 +1,27 @@
-package org.agilewiki.pactor.exceptions;
+package org.agilewiki.general.messaging;
 
 import org.agilewiki.pactor.Mailbox;
 import org.agilewiki.pactor.Request;
 import org.agilewiki.pactor.RequestBase;
 import org.agilewiki.pactor.ResponseProcessor;
 
-public class ActorA {
+/**
+ * Test code.
+ */
+public class Actor3 {
     private final Mailbox mailbox;
-    public final Request<Void> throwRequest;
+    public final Request<Void> hi3;
 
-    public ActorA(final Mailbox mbox) {
+    public Actor3(final Mailbox mbox) {
         this.mailbox = mbox;
 
-        throwRequest = new RequestBase<Void>(mailbox) {
+        hi3 = new RequestBase<Void>(mailbox) {
             @Override
             public void processRequest(
                     final ResponseProcessor<Void> responseProcessor)
                     throws Exception {
-                throw new SecurityException("thrown on request");
+                System.out.println("Hello world!");
+                responseProcessor.processResponse(null);
             }
         };
     }

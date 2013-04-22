@@ -1,4 +1,4 @@
-package org.agilewiki.pactor.exceptions;
+package org.agilewiki.general.exceptions;
 
 import org.agilewiki.pactor.*;
 

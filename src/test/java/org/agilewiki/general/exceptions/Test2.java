@@ -1,4 +1,4 @@
-package org.agilewiki.pactor.exceptions;
+package org.agilewiki.general.exceptions;
 
 import junit.framework.TestCase;
 import org.agilewiki.pactor.Mailbox;

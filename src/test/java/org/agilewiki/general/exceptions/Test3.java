@@ -1,4 +1,4 @@
-package org.agilewiki.pactor.messaging;
+package org.agilewiki.general.exceptions;
 
 import junit.framework.TestCase;
 import org.agilewiki.pactor.Mailbox;
@@ -8,13 +8,13 @@ import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 /**
  * Test code.
  */
-public class Test1 extends TestCase {
-    public void testa() throws Exception {
+public class Test3 extends TestCase {
+    public void testI() throws Exception {
         final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl();
         final Mailbox mailbox = mailboxFactory.createMailbox(true);
-        final Actor1 actor1 = new Actor1(mailbox);
-        final String result = actor1.hi1.call();
-        assertEquals("Hello world!", result);
+        final ActorC actorC = new ActorC(mailbox);
+        final String result = actorC.throwRequest.call();
+        assertEquals("java.lang.SecurityException: thrown on request", result);
         mailboxFactory.close();
     }
 }

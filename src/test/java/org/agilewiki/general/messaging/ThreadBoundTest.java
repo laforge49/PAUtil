@@ -1,4 +1,4 @@
-package org.agilewiki.pactor.messaging;
+package org.agilewiki.general.messaging;
 
 import junit.framework.TestCase;
 import org.agilewiki.pactor.Mailbox;
