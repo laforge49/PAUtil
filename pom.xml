@@ -84,8 +84,8 @@
                             org.agilewiki.pautil*;version=${project.version}
                         </Export-Package>
                         <Import-Package>
-                            org.agilewiki.pactor*;version="[0.0.1,*)",
-                            org.agilewiki.pamailbox*;version="[0.0.1,*)",
+                            org.agilewiki.pactor*;version="0.0.1-SNAPSHOT",
+                            org.agilewiki.pamailbox*;version="0.0.1-SNAPSHOT",
                             *
                         </Import-Package>
                     </instructions>
