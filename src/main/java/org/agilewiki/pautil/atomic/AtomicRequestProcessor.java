@@ -2,12 +2,7 @@ package org.agilewiki.pautil.atomic;
 
 import java.util.Queue;
 
-import org.agilewiki.pactor.ActorBase;
-import org.agilewiki.pactor.ExceptionHandler;
-import org.agilewiki.pactor.Mailbox;
-import org.agilewiki.pactor.Request;
-import org.agilewiki.pactor.RequestBase;
-import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.*;
 
 /**
  * An actor which processes a requests one at a time, waiting for each
@@ -49,7 +44,7 @@ public abstract class AtomicRequestProcessor extends ActorBase implements
     public Request<?> atomicReq(final Request _request) {
         return new RequestBase<Object>(getMailbox()) {
             @Override
-            public void processRequest(final ResponseProcessor<Object> _rp)
+            public void processRequest(final Transport<Object> _rp)
                     throws Exception {
                 entries.offer(new AtomicEntry(_request, _rp));
             }

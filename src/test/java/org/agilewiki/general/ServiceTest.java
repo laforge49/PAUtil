@@ -48,7 +48,7 @@ class ActorA extends ActorBase {
     Request<Void> startReq() {
         return new RequestBase<Void>(getMailbox()) {
             @Override
-            public void processRequest(final ResponseProcessor<Void> _rp) throws Exception {
+            public void processRequest(final Transport<Void> _rp) throws Exception {
                 getMailbox().setExceptionHandler(new ExceptionHandler() {
                     @Override
                     public void processException(Throwable throwable) throws Throwable {
@@ -72,7 +72,7 @@ class ActorA extends ActorBase {
     Request<Boolean> doneReq() {
         return new RequestBase<Boolean>(getMailbox()) {
             @Override
-            public void processRequest(ResponseProcessor<Boolean> _rp) throws Exception {
+            public void processRequest(Transport<Boolean> _rp) throws Exception {
                 doneRP = _rp;
             }
         };
@@ -87,7 +87,7 @@ class ActorB extends ActorBase {
     Request<Integer> getReq() {
         return new RequestBase<Integer>(getMailbox()) {
             @Override
-            public void processRequest(ResponseProcessor<Integer> _rp) throws Exception {
+            public void processRequest(Transport<Integer> _rp) throws Exception {
                 _rp.processResponse(42);
             }
         };
@@ -96,7 +96,7 @@ class ActorB extends ActorBase {
     Request<Integer> slowReq() {
         return new RequestBase<Integer>(getMailbox()) {
             @Override
-            public void processRequest(ResponseProcessor<Integer> _rp) throws Exception {
+            public void processRequest(Transport<Integer> _rp) throws Exception {
                 long l = 0;
                 while (l < 1000000000)
                     l += 1;

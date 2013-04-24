@@ -3,6 +3,7 @@ package org.agilewiki.pautil;
 import org.agilewiki.pactor.Mailbox;
 import org.agilewiki.pactor.RequestBase;
 import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.Transport;
 
 /**
  * A thread-safe wrapper for ResponseProcessor.
@@ -102,7 +103,7 @@ class ContinuationRequest<RESPONSE_TYPE> extends RequestBase<Void> {
      * @param _rp The ResponseProcessor for the signal.
      */
     @Override
-    public void processRequest(final ResponseProcessor<Void> _rp)
+    public void processRequest(final Transport<Void> _rp)
             throws Exception {
         rp.processResponse(rsp);
         _rp.processResponse(null);

@@ -3,13 +3,7 @@ package org.agilewiki.pautil;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.agilewiki.pactor.Actor;
-import org.agilewiki.pactor.ActorBase;
-import org.agilewiki.pactor.ExceptionHandler;
-import org.agilewiki.pactor.Request;
-import org.agilewiki.pactor.RequestBase;
-import org.agilewiki.pactor.ResponseProcessor;
-import org.agilewiki.pactor.UnboundRequest;
+import org.agilewiki.pactor.*;
 
 /**
  * Implements Publish and Subscribe.
@@ -32,7 +26,7 @@ public class Publisher<TARGET_ACTOR_TYPE extends Actor> extends ActorBase {
     public Request<Boolean> subscribeReq(final TARGET_ACTOR_TYPE _subscriber) {
         return new RequestBase<Boolean>(getMailbox()) {
             @Override
-            public void processRequest(final ResponseProcessor<Boolean> _rp)
+            public void processRequest(final Transport<Boolean> _rp)
                     throws Exception {
                 _rp.processResponse(subscribers.add(_subscriber));
             }
@@ -49,7 +43,7 @@ public class Publisher<TARGET_ACTOR_TYPE extends Actor> extends ActorBase {
     public Request<Boolean> unsubscribeReq(final TARGET_ACTOR_TYPE _subscriber) {
         return new RequestBase<Boolean>(getMailbox()) {
             @Override
-            public void processRequest(final ResponseProcessor<Boolean> _rp)
+            public void processRequest(final Transport<Boolean> _rp)
                     throws Exception {
                 _rp.processResponse(subscribers.remove(_subscriber));
             }
@@ -69,7 +63,7 @@ public class Publisher<TARGET_ACTOR_TYPE extends Actor> extends ActorBase {
             final UnboundRequest<Void, TARGET_ACTOR_TYPE> unboundRequest) {
         return new RequestBase<Void>(getMailbox()) {
             @Override
-            public void processRequest(final ResponseProcessor<Void> _rp)
+            public void processRequest(final Transport<Void> _rp)
                     throws Exception {
                 final Object[] subs = subscribers.toArray();
                 final ResponseCounter<Void> rc = new ResponseCounter<Void>(

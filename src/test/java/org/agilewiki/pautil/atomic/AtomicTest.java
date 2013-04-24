@@ -2,11 +2,7 @@ package org.agilewiki.pautil.atomic;
 
 import junit.framework.TestCase;
 
-import org.agilewiki.pactor.Mailbox;
-import org.agilewiki.pactor.MailboxFactory;
-import org.agilewiki.pactor.Request;
-import org.agilewiki.pactor.RequestBase;
-import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.*;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 import org.agilewiki.pautil.Delay;
 import org.agilewiki.pautil.ResponseCounter;
@@ -27,7 +23,7 @@ public class AtomicTest extends TestCase {
     Request<Integer> startReq1(final Mailbox _mailbox) {
         return new RequestBase<Integer>(_mailbox) {
             @Override
-            public void processRequest(final ResponseProcessor<Integer> _rp)
+            public void processRequest(final Transport<Integer> _rp)
                     throws Exception {
                 final FifoRequestProcessor ap = FifoRequestProcessor
                         .create(getMailbox().getMailboxFactory());
@@ -52,7 +48,7 @@ public class AtomicTest extends TestCase {
         final Mailbox mailbox = ap.getMailbox();
         return new RequestBase<Void>(mailbox) {
             @Override
-            public void processRequest(final ResponseProcessor<Void> _rp)
+            public void processRequest(final Transport<Void> _rp)
                     throws Exception {
                 Delay delay = new Delay(mailbox.getMailboxFactory());
                 delay.sleepReq(100 - (msg * 20)).send(mailbox,
@@ -86,7 +82,7 @@ public class AtomicTest extends TestCase {
     Request<Void> bReq(final Mailbox _mailbox) {
         return new RequestBase<Void>(_mailbox) {
             @Override
-            public void processRequest(ResponseProcessor<Void> responseProcessor)
+            public void processRequest(Transport<Void> responseProcessor)
                     throws Exception {
                 throw new UnsupportedOperationException("it happen");
             }

@@ -1,9 +1,6 @@
 package org.agilewiki.general.messaging;
 
-import org.agilewiki.pactor.Mailbox;
-import org.agilewiki.pactor.Request;
-import org.agilewiki.pactor.RequestBase;
-import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.*;
 
 /**
  * Test code.
@@ -19,7 +16,7 @@ public class Actor2 {
         return new RequestBase<String>(mailbox) {
             @Override
             public void processRequest(
-                    final ResponseProcessor<String> responseProcessor)
+                    final Transport<String> responseProcessor)
                     throws Exception {
                 actor1.hi1.send(mailbox, responseProcessor);
             }

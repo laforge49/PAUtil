@@ -2,13 +2,7 @@ package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
 
-import org.agilewiki.pactor.ActorBase;
-import org.agilewiki.pactor.Mailbox;
-import org.agilewiki.pactor.MailboxFactory;
-import org.agilewiki.pactor.Request;
-import org.agilewiki.pactor.RequestBase;
-import org.agilewiki.pactor.ResponseProcessor;
-import org.agilewiki.pactor.UnboundRequestBase;
+import org.agilewiki.pactor.*;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 public class PAIteratorTest extends TestCase {
@@ -59,7 +53,7 @@ public class PAIteratorTest extends TestCase {
     Request<Void> runReq() {
         return new RequestBase<Void>(mailbox) {
             @Override
-            public void processRequest(final ResponseProcessor<Void> _rp)
+            public void processRequest(final Transport<Void> _rp)
                     throws Exception {
                 final CounterActor counterActor = new CounterActor();
                 counterActor.initialize(counterMailbox);
@@ -121,7 +115,7 @@ class UnboundAddReq extends UnboundRequestBase<Void, CounterActor> {
 
     @Override
     public void processRequest(final CounterActor _targetActor,
-            final ResponseProcessor<Void> _rp) throws Exception {
+            final Transport<Void> _rp) throws Exception {
         _targetActor.add(inc);
         _rp.processResponse(null);
     }
@@ -131,7 +125,7 @@ class UnboundResetReq extends UnboundRequestBase<Long, CounterActor> {
 
     @Override
     public void processRequest(final CounterActor _targetActor,
-            final ResponseProcessor<Long> _rp) throws Exception {
+            final Transport<Long> _rp) throws Exception {
         _rp.processResponse(_targetActor.reset());
     }
 }

@@ -1,9 +1,6 @@
 package org.agilewiki.general.exceptions;
 
-import org.agilewiki.pactor.Mailbox;
-import org.agilewiki.pactor.Request;
-import org.agilewiki.pactor.RequestBase;
-import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.*;
 
 public class ActorA {
     private final Mailbox mailbox;
@@ -15,7 +12,7 @@ public class ActorA {
         throwRequest = new RequestBase<Void>(mailbox) {
             @Override
             public void processRequest(
-                    final ResponseProcessor<Void> responseProcessor)
+                    final Transport<Void> responseProcessor)
                     throws Exception {
                 throw new SecurityException("thrown on request");
             }

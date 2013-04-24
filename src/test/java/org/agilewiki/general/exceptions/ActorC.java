@@ -12,7 +12,7 @@ public class ActorC {
         throwRequest = new RequestBase<String>(mailbox) {
             @Override
             public void processRequest(
-                    final ResponseProcessor<String> responseProcessor)
+                    final Transport<String> responseProcessor)
                     throws Exception {
                 mailbox.setExceptionHandler(new ExceptionHandler() {
                     @Override

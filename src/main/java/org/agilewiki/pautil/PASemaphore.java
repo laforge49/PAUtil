@@ -3,10 +3,7 @@ package org.agilewiki.pautil;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import org.agilewiki.pactor.Mailbox;
-import org.agilewiki.pactor.Request;
-import org.agilewiki.pactor.RequestBase;
-import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.*;
 
 /**
  * Blocks request processing, not threads.
@@ -50,7 +47,7 @@ public class PASemaphore {
         acquire = new RequestBase<Void>(mailbox) {
             @Override
             public void processRequest(
-                    final ResponseProcessor<Void> responseProcessor)
+                    final Transport<Void> responseProcessor)
                     throws Exception {
                 if (permits > 0) {
                     permits -= 1;
@@ -64,7 +61,7 @@ public class PASemaphore {
         release = new RequestBase<Void>(mailbox) {
             @Override
             public void processRequest(
-                    final ResponseProcessor<Void> responseProcessor)
+                    final Transport<Void> responseProcessor)
                     throws Exception {
                 final ResponseProcessor<Void> rp = queue.poll();
                 if (rp == null) {

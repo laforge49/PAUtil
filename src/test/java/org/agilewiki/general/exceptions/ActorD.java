@@ -13,7 +13,7 @@ public class ActorD {
         doSomethin = new RequestBase<Void>(mailbox) {
             @Override
             public void processRequest(
-                    final ResponseProcessor<Void> responseProcessor)
+                    final Transport<Void> responseProcessor)
                     throws Exception {
                 responseProcessor.processResponse(null);
             }
@@ -22,7 +22,7 @@ public class ActorD {
         throwRequest = new RequestBase<String>(mailbox) {
             @Override
             public void processRequest(
-                    final ResponseProcessor<String> responseProcessor)
+                    final Transport<String> responseProcessor)
                     throws Exception {
                 mailbox.setExceptionHandler(new ExceptionHandler() {
                     @Override

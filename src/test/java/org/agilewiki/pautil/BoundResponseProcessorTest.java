@@ -2,12 +2,7 @@ package org.agilewiki.pautil;
 
 import junit.framework.TestCase;
 
-import org.agilewiki.pactor.ActorBase;
-import org.agilewiki.pactor.Mailbox;
-import org.agilewiki.pactor.MailboxFactory;
-import org.agilewiki.pactor.Request;
-import org.agilewiki.pactor.RequestBase;
-import org.agilewiki.pactor.ResponseProcessor;
+import org.agilewiki.pactor.*;
 import org.agilewiki.pamailbox.DefaultMailboxFactoryImpl;
 
 public class BoundResponseProcessorTest extends TestCase {
@@ -36,7 +31,7 @@ class Driver extends ActorBase {
 
         doitReq = new RequestBase<String>(_mailbox) {
             @Override
-            public void processRequest(final ResponseProcessor<String> rp)
+            public void processRequest(final Transport<String> rp)
                     throws Exception {
                 final BoundResponseProcessor<String> boundResponseProcessor = new BoundResponseProcessor<String>(
                         _mailbox, rp);
